@@ -138,6 +138,20 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:12p
 .row.sub .main b{font-weight:500;font-size:.95rem}
 .sesshead+.row.sub{border-top:0!important}
 .row+.sesshead,.rowx+.sesshead{border-top:1px solid var(--line)}
+.baby h1::after{content:" ▾";font-size:.55em;color:var(--muted);vertical-align:middle}
+.plist{display:flex;flex-direction:column;gap:8px}
+.pitem{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 14px;border-radius:14px;background:var(--soft);border:2px solid transparent}
+.pitem.cur{border-color:var(--fg);background:var(--surface)}
+.pitem .main{flex:1;min-width:0}
+.pitem b{display:block;font-weight:700}
+.pitem span{color:var(--muted);font-size:.85rem}
+.pitem .tag{font-size:.75rem;font-weight:700;color:var(--sleep);white-space:nowrap}
+.psec{display:flex;flex-direction:column;gap:8px}
+.psec h4{margin:4px 0 0;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.codebox{font-family:ui-monospace,Menlo,monospace;font-size:1.05rem;padding:12px 14px;border-radius:12px;background:var(--soft);user-select:all;-webkit-user-select:all;overflow-wrap:anywhere}
+.btnrow{display:flex;flex-wrap:wrap;gap:8px}
+.linkish{color:var(--feed);font-weight:600;padding:8px 0;text-align:left}
+.linkish.warn{color:var(--warn)}
 .rowx{display:flex;justify-content:flex-end;gap:8px;padding:0 16px 12px}
 .btn{padding:9px 16px;border-radius:12px;font-weight:600;font-size:.92rem;background:var(--soft)}
 .btn.danger{background:var(--warn);color:var(--surface)}
@@ -179,7 +193,7 @@ nav.tabs button[aria-selected="true"]{color:var(--fg);background:var(--soft)}
 
 <div class="app">
   <header class="top">
-    <button class="baby" id="babyBtn" aria-label="Edit baby details"><h1 id="babyName">Baby</h1><span id="babyAge">Tap to add name and birthday</span></button>
+    <button class="baby" id="babyBtn" aria-label="Switch baby or family"><h1 id="babyName">Baby</h1><span id="babyAge">Tap to add name and birthday</span></button>
     <div class="datechip num" id="clock"></div>
   </header>
   <div id="banner" class="banner" hidden></div>
@@ -230,7 +244,7 @@ nav.tabs button[aria-selected="true"]{color:var(--fg);background:var(--soft)}
 (function(){
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-let feedTimer=null, db=null, histLimit=1500, moreAvailable=false, entries=[], sleepStart=null, baby={}, tab="today", filter="all", openRow=null, confirmRow=null;
+let babyId=null, feedTimer=null, db=null, histLimit=1500, moreAvailable=false, entries=[], sleepStart=null, baby={}, tab="today", filter="all", openRow=null, confirmRow=null;
 
 /* ---------- formatting ---------- */
 const MIN=60000, HR=3600000, DAY=86400000;
@@ -434,23 +448,23 @@ async function rpc(fn,args){
   if(!r.ok){const err=new Error(t);err.badCode=/Wrong family code/.test(t);throw err;}
   return t?JSON.parse(t):null;
 }
-function saveError(e){if(e&&e.badCode){askCode(true);return;}toast("Couldn't save. Check your connection and try again.");}
+function saveError(e){if(e&&e.badCode){toast("This family code no longer works");return;}toast("Couldn't save. Check your connection and try again.");}
 let busy=0;
 async function refresh(){
-  if(!code||busy)return;
-  try{const d=await rpc("nest_list_n",{p_limit:histLimit});if(busy)return;
+  if(!code||!babyId||busy)return;
+  try{const d=await rpc("nest_list_b",{p_baby:babyId,p_limit:histLimit});if(busy)return;
     entries=d.entries||[];moreAvailable=entries.length>=histLimit;const st=d.state||{};sleepStart=(st.current&&st.current.sleepStart)||null;baby=st.baby||{};feedTimer=st.feed&&st.feed.start?{side:st.feed.side,start:st.feed.start}:null;
     $("banner").hidden=true;render();}
-  catch(e){if(e.badCode)askCode(true);else{const b=$("banner");b.hidden=false;b.textContent="Offline. Showing the last loaded log; new taps may not save.";}}
+  catch(e){if(e.badCode)toast("This family code no longer works");else{const b=$("banner");b.hidden=false;b.textContent="Offline. Showing the last loaded log; new taps may not save.";}}
 }
 function loadOlder(){histLimit+=1500;toast("Loading older entries…");refresh();}
-async function persistFeedTimer(v){try{await write("nest_state_set",{p_key:"feed",p_value:v?{side:v.side,start:v.start}:{side:null,start:null}});}catch(e){}refresh();}
+async function persistFeedTimer(v){try{await write("nest_state_set_b",{p_baby:babyId,p_key:"feed",p_value:v?{side:v.side,start:v.start}:{side:null,start:null}});}catch(e){}refresh();}
 async function write(fn,args){busy++;try{return await rpc(fn,args);}catch(e){saveError(e);throw e;}finally{busy--;}}
 const pending={};
 function addEntry(obj){
   const tmp="tmp"+Math.random().toString(36).slice(2);
   entries.unshift({id:tmp,...obj});entries.sort((a,b)=>b.at-a.at);render();
-  pending[tmp]=write("nest_add",{p_entry:obj}).then(id=>{entries=entries.map(e=>e.id===tmp?{...e,id}:e);if(openRow===tmp)openRow=id;render();return id;}).catch(()=>{entries=entries.filter(e=>e.id!==tmp);render();return null;});
+  pending[tmp]=write("nest_add_b",{p_baby:babyId,p_entry:obj}).then(id=>{entries=entries.map(e=>e.id===tmp?{...e,id}:e);if(openRow===tmp)openRow=id;render();return id;}).catch(()=>{entries=entries.filter(e=>e.id!==tmp);render();return null;});
   return tmp;
 }
 async function realId(id){return id.startsWith("tmp")?await pending[id]:id;}
@@ -614,17 +628,7 @@ function tempSheet(cur){
         const obj={type:"temp",c:Math.round(v*10)/10,at:fromInput($("fTime").value)};if(cur)setEntry(cur.id,obj);else addEntry(obj);closeSheet();toast(v>=38?"Saved. 38 °C or higher: call your doctor.":"Temperature logged");};
     });
 }
-function babySheet(){
-  openSheet(`<h3>Baby details</h3>
-    <div class="field"><label for="fName">Name</label><input id="fName" maxlength="40" placeholder="Baby's name"></div>
-    <div class="field"><label for="fBorn">Birthday</label><input id="fBorn" type="date"></div>
-    ${btns("var(--fg)","Save")}`, ()=>{
-      $("fName").value=baby.name||"";if(baby.born)$("fBorn").value=new Date(baby.born).toISOString().slice(0,10);
-      $("fSave").onclick=async()=>{const name=$("fName").value.trim(),bv=$("fBorn").value;
-        const born=bv?new Date(bv+"T12:00").getTime():null;baby={name,born};closeSheet();render();
-        try{await write("nest_state_set",{p_key:"baby",p_value:{name,born}});}catch(e){}};
-    });
-}
+/* babies, families and codes live in the profiles section below */
 
 /* ---------- events ---------- */
 $("actFeed").onclick=()=>feedTimer?stopFeed():feedSheet(null);
@@ -639,12 +643,12 @@ $("actWeight").onclick=()=>weightSheet(null);
 $("actTemp").onclick=()=>tempSheet(null);
 $("addPastSleep").onclick=()=>sleepSheet(null);
 $("actNote").onclick=()=>generalNoteSheet(null);
-$("babyBtn").onclick=babySheet;
+$("babyBtn").onclick=()=>profileSheet();
 let sleepOp=Promise.resolve();
 function endSleepNow(){if(!sleepStart)return;const at=sleepStart,end=Date.now();sleepStart=null;
   if(end-at>=MIN){entries.unshift({id:"tmpsleep",type:"sleep",at,end});entries.sort((a,b)=>b.at-a.at);}render();
-  sleepOp=sleepOp.then(()=>write("nest_sleep")).catch(()=>{}).then(refresh);}
-const clearSleep=async()=>{try{await write("nest_state_set",{p_key:"current",p_value:{sleepStart:null}});}catch(e){}refresh();};
+  sleepOp=sleepOp.then(()=>write("nest_sleep_b",{p_baby:babyId})).catch(()=>{}).then(refresh);}
+const clearSleep=async()=>{try{await write("nest_state_set_b",{p_baby:babyId,p_key:"current",p_value:{sleepStart:null}});}catch(e){}refresh();};
 $("actSleep").onclick=async()=>{
   await sleepOp;
   if(sleepStart){const at=sleepStart,end=Date.now();sleepStart=null;
@@ -652,7 +656,7 @@ $("actSleep").onclick=async()=>{
     entries.unshift({id:"tmpsleep",type:"sleep",at,end});entries.sort((a,b)=>b.at-a.at);render();toast(`Slept ${dur(end-at)}`);}
   else{sleepStart=Date.now();render();
     toast("Sleep timer started",[["Undo",async()=>{sleepStart=null;render();toast("Timer cancelled");await sleepOp;sleepOp=clearSleep();}]]);}
-  sleepOp=write("nest_sleep").catch(()=>{}).then(refresh);
+  sleepOp=write("nest_sleep_b",{p_baby:babyId}).catch(()=>{}).then(refresh);
 };
 function setTab(t){tab=t;
   for(const [v,b,k] of [["viewToday","tabToday","today"],["viewTrends","tabTrends","trends"],["viewHistory","tabHistory","history"]]){$(v).hidden=t!==k;$(b).setAttribute("aria-selected",t===k);}
@@ -675,21 +679,145 @@ $("historyList").addEventListener("click",e=>{
 setInterval(()=>{if(document.hidden)return;renderToday();refresh();},20000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden){render();refresh();}});
 
-/* ---------- family code ---------- */
-function askCode(wrong){
-  openSheet(`<h3>Family code</h3>
-    <p class="note${wrong?" warn":""}">${wrong?"That code didn't work. Check it and try again.":"Enter the family code once on this device to open your shared log."}</p>
-    <div class="field"><label for="fCode">Code</label><input id="fCode" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="nest-…"></div>
-    <div class="sheetbtns" style="grid-template-columns:1fr"><button class="primary" id="fSave" style="background:var(--fg)">Open log</button></div>`,()=>{
-      $("fSave").onclick=()=>{const v=$("fCode").value.trim();if(!v)return;code=v;try{localStorage.setItem("nestCode",v);}catch(e){}closeSheet();refresh();};
+/* ---------- families & babies ---------- */
+let family=null,families=[];
+function loadLocal(){
+  try{families=JSON.parse(localStorage.getItem("nasiFamilies")||"[]");}catch(e){families=[];}
+  if(!Array.isArray(families))families=[];
+  try{const legacy=localStorage.getItem("nestCode");if(legacy&&!families.some(f=>f.code===legacy))families.push({code:legacy,name:"My family"});}catch(e){}
+  let cur={};try{cur=JSON.parse(localStorage.getItem("nasiCurrent")||"{}");}catch(e){}
+  code=cur.code&&families.some(f=>f.code===cur.code)?cur.code:(families[0]?.code||"");babyId=cur.code===code?cur.baby||null:null;
+}
+function saveLocal(){try{localStorage.setItem("nasiFamilies",JSON.stringify(families));localStorage.setItem("nasiCurrent",JSON.stringify({code,baby:babyId}));localStorage.removeItem("nestCode");}catch(e){}}
+function resetView(){entries=[];sleepStart=null;feedTimer=null;baby={};openRow=confirmRow=null;histLimit=1500;Object.keys(trendSel).forEach(k=>delete trendSel[k]);render();}
+async function openFamily(c,bid){
+  const prev={code,babyId};code=c;
+  try{family=await rpc("nest_family_info");}
+  catch(e){code=prev.code;babyId=prev.babyId;if(e.badCode){families=families.filter(f=>f.code!==c);saveLocal();toast("That family code didn't work");if(!families.length)welcomeSheet();}else toast("Couldn't reach NasiLog. Check your connection.");return false;}
+  const f=families.find(x=>x.code===c);if(f)f.name=family.name;else families.push({code:c,name:family.name});
+  const ids=family.babies.map(b=>b.id);
+  babyId=ids.includes(bid)?bid:(ids.includes(family.watchBaby)?family.watchBaby:ids[0]||null);
+  saveLocal();resetView();await refresh();return true;
+}
+function switchBaby(id){if(id===babyId)return;babyId=id;saveLocal();resetView();refresh();const b=family.babies.find(x=>x.id===id);toast(`Now logging for ${b?b.name:"baby"}`);}
+function ageText(born){if(!born)return"No birthday set";const d=Math.floor((dayStart(Date.now())-dayStart(born))/DAY);return d<0?"Due soon":d<14?`${d} day${d===1?"":"s"} old`:d<84?`${Math.floor(d/7)} weeks old`:`${Math.floor(d/30.44)} months old`;}
+function inviteLink(){return location.origin+location.pathname+"#c="+code;}
+async function copyText(t,label){try{await navigator.clipboard.writeText(t);toast(`${label} copied`);}catch(e){toast("Select the text and copy it");}}
+
+function profileSheet(){
+  if(!family){welcomeSheet();return;}
+  const others=families.filter(f=>f.code!==code);
+  const babies=family.babies.map(b=>`<button class="pitem${b.id===babyId?" cur":""}" data-baby="${esc(b.id)}"><span class="main"><b>${esc(b.name)}</b><span>${esc(ageText(b.born))}</span></span>${b.id===family.watchBaby?'<span class="tag">⌚ Watch</span>':""}</button>`).join("");
+  const cur=family.babies.find(b=>b.id===babyId);
+  openSheet(`<h3>${esc(family.name)}</h3>
+    <div class="psec"><h4>Babies</h4><div class="plist">${babies}</div>
+      <div class="btnrow"><button class="btn" id="pAdd">+ Add a baby</button>${cur?`<button class="btn" id="pEdit">Edit ${esc(cur.name)}</button>`:""}${cur&&cur.id!==family.watchBaby&&family.babies.length>1?`<button class="btn" id="pWatch">Use ${esc(cur.name)} on Apple Watch</button>`:""}</div></div>
+    <div class="psec"><h4>Family code</h4>
+      <div class="codebox" id="pCode">${esc(code)}</div>
+      <p class="note">Anyone with this code can see and add to this family's log. Share it only with people you trust.</p>
+      <div class="btnrow"><button class="btn" id="pCopy">Copy code</button><button class="btn" id="pLink">Copy invite link</button><button class="btn" id="pRename">Rename family</button></div></div>
+    <div class="psec"><h4>Other families</h4>
+      ${others.length?`<div class="plist">${others.map(f=>`<button class="pitem" data-fam="${esc(f.code)}"><span class="main"><b>${esc(f.name)}</b><span>Tap to switch</span></span></button>`).join("")}</div>`:""}
+      <button class="linkish" id="pJoin">+ Join a family with a code</button>
+      <button class="linkish" id="pNew">+ Start a new family</button>
+      <button class="linkish warn" id="pOut">Sign out of ${esc(family.name)} on this device</button></div>
+    <div class="sheetbtns" style="grid-template-columns:1fr"><button class="btn" data-close>Done</button></div>`,root=>{
+      root.querySelectorAll("[data-baby]").forEach(b=>b.onclick=()=>{closeSheet();switchBaby(b.dataset.baby);});
+      root.querySelectorAll("[data-fam]").forEach(b=>b.onclick=async()=>{closeSheet();if(await openFamily(b.dataset.fam,null))toast(`Switched to ${family.name}`);});
+      $("pAdd").onclick=()=>babyForm(null);
+      if($("pEdit"))$("pEdit").onclick=()=>babyForm(cur);
+      if($("pWatch"))$("pWatch").onclick=async()=>{try{await write("nest_set_watch_baby",{p_baby:cur.id});family.watchBaby=cur.id;toast(`Apple Watch now logs for ${cur.name}`);profileSheet();}catch(e){}};
+      $("pCopy").onclick=()=>copyText(code,"Family code");
+      $("pLink").onclick=()=>copyText(inviteLink(),"Invite link");
+      $("pRename").onclick=()=>renameFamily();
+      $("pJoin").onclick=()=>joinSheet(false);
+      $("pNew").onclick=()=>newFamilySheet(false);
+      $("pOut").onclick=()=>signOutSheet();
+    });
+}
+function babyForm(b){
+  openSheet(`<h3>${b?"Edit baby":"Add a baby"}</h3>
+    <div class="field"><label for="fName">Name</label><input id="fName" maxlength="40" placeholder="Baby's name"></div>
+    <div class="field"><label for="fBorn">Birthday</label><input id="fBorn" type="date"></div>
+    ${btns("var(--fg)",b?"Save":"Add baby")}`,()=>{
+      if(b){$("fName").value=b.name||"";if(b.born)$("fBorn").value=new Date(b.born).toISOString().slice(0,10);}
+      $("fSave").onclick=async()=>{const name=$("fName").value.trim(),bv=$("fBorn").value;if(!name){toast("Enter a name");return;}
+        const born=bv?new Date(bv+"T12:00").getTime():null;closeSheet();
+        try{
+          if(b){await write("nest_baby_update",{p_baby:b.id,p_name:name,p_born:born});Object.assign(b,{name,born});if(b.id===babyId)baby={name,born};render();toast("Saved");}
+          else{const id=await write("nest_baby_add",{p_name:name,p_born:born});family.babies.push({id,name,born});switchBaby(id);}
+        }catch(e){}};
+    });
+}
+function renameFamily(){
+  openSheet(`<h3>Rename family</h3><div class="field"><label for="fFam">Family name</label><input id="fFam" maxlength="40"></div>${btns("var(--fg)","Save")}`,()=>{
+    $("fFam").value=family.name;
+    $("fSave").onclick=async()=>{const n=$("fFam").value.trim();if(!n)return;closeSheet();
+      try{await write("nest_family_rename",{p_name:n});family.name=n;const f=families.find(x=>x.code===code);if(f)f.name=n;saveLocal();toast("Family renamed");}catch(e){}};
+  });
+}
+function joinSheet(locked){
+  openSheet(`<h3>Join a family</h3>
+    <p class="note">Enter the family code someone shared with you. You'll see the same babies and log they do.</p>
+    <div class="field"><label for="fCode">Family code</label><input id="fCode" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="nasi-…"></div>
+    <div class="sheetbtns">${locked?`<button class="btn" id="jBack">Back</button>`:`<button class="btn" data-close>Cancel</button>`}<button class="primary" id="fSave" style="background:var(--fg)">Join</button></div>`,()=>{
+      if($("jBack"))$("jBack").onclick=welcomeSheet;
+      $("fSave").onclick=async()=>{const v=$("fCode").value.trim();if(!v)return;closeSheet();
+        if(!(await openFamily(v,null))){joinSheet(locked);return;}toast(`Joined ${family.name}`);};
+    },locked);
+}
+function newFamilySheet(locked){
+  openSheet(`<h3>Start a new family</h3>
+    <p class="note">You'll get a new family code to share with your partner or caregivers.</p>
+    <div class="field"><label for="fFam">Family name</label><input id="fFam" maxlength="40" placeholder="e.g. The Qamhieh family"></div>
+    <div class="field"><label for="fName">Baby's name</label><input id="fName" maxlength="40" placeholder="Baby's name"></div>
+    <div class="field"><label for="fBorn">Birthday (optional)</label><input id="fBorn" type="date"></div>
+    <div class="sheetbtns">${locked?`<button class="btn" id="jBack">Back</button>`:`<button class="btn" data-close>Cancel</button>`}<button class="primary" id="fSave" style="background:var(--fg)">Create family</button></div>`,()=>{
+      if($("jBack"))$("jBack").onclick=welcomeSheet;
+      $("fSave").onclick=async()=>{const fam=$("fFam").value.trim(),name=$("fName").value.trim(),bv=$("fBorn").value;if(!name){toast("Enter the baby's name");return;}
+        const born=bv?new Date(bv+"T12:00").getTime():null;$("fSave").disabled=true;
+        try{const r=await rpc("nest_family_create",{p_family:fam||"My family",p_baby:name,p_born:born});
+          closeSheet();if(await openFamily(r.code,r.baby))codeReadySheet();}
+        catch(e){$("fSave").disabled=false;toast("Couldn't create the family. Check your connection.");}};
+    },locked);
+}
+function codeReadySheet(){
+  openSheet(`<h3>Your family code</h3>
+    <div class="codebox">${esc(code)}</div>
+    <p class="note">Share this code, or the invite link, with your partner so you both log to the same place. You can find it again by tapping the baby's name.</p>
+    <div class="btnrow"><button class="btn" id="cCopy">Copy code</button><button class="btn" id="cLink">Copy invite link</button></div>
+    <div class="sheetbtns" style="grid-template-columns:1fr"><button class="primary" data-close style="background:var(--fg)">Start logging</button></div>`,()=>{
+      $("cCopy").onclick=()=>copyText(code,"Family code");$("cLink").onclick=()=>copyText(inviteLink(),"Invite link");
+    });
+}
+function signOutSheet(){
+  openSheet(`<h3>Sign out of ${esc(family.name)}?</h3>
+    <p class="note">This only removes the family from this device. The log stays saved, and you can rejoin anytime with the family code.</p>
+    <div class="codebox">${esc(code)}</div>
+    <div class="sheetbtns"><button class="btn" data-close>Cancel</button><button class="primary" id="oYes" style="background:var(--warn)">Sign out</button></div>`,()=>{
+      $("oYes").onclick=async()=>{const gone=code;families=families.filter(f=>f.code!==gone);code="";babyId=null;family=null;saveLocal();resetView();closeSheet();
+        if(families.length){await openFamily(families[0].code,null);toast(`Switched to ${family.name}`);}else welcomeSheet();};
+    });
+}
+function welcomeSheet(){
+  openSheet(`<h3>Welcome to NasiLog</h3>
+    <p class="note">Track feeds, diapers and sleep, shared with everyone who cares for your baby.</p>
+    <div class="sheetbtns" style="grid-template-columns:1fr">
+      <button class="primary" id="wJoin" style="background:var(--fg)">I have a family code</button>
+      <button class="btn" id="wNew">Start a new family</button></div>`,()=>{
+      $("wJoin").onclick=()=>joinSheet(true);$("wNew").onclick=()=>newFamilySheet(true);
     },true);
 }
 
 /* ---------- boot ---------- */
 render();
-const fromHash=(location.hash.match(/c=([\w-]+)/)||[])[1];
-try{code=fromHash||localStorage.getItem("nestCode")||"";if(fromHash)localStorage.setItem("nestCode",fromHash);}catch(e){code=fromHash||"";}
-if(code)refresh();else askCode(false);
+(async()=>{
+  loadLocal();
+  const fromHash=(location.hash.match(/c=([\w-]+)/)||[])[1];
+  if(fromHash&&!families.some(f=>f.code===fromHash)){if(await openFamily(fromHash,null))return;}
+  if(code){if(!(await openFamily(code,babyId))&&!families.length)welcomeSheet();}
+  else welcomeSheet();
+})();
 })();
 </script>
 
