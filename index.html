@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAIAAAB7GkOtAAAM5UlEQVR4nO3bu5FlRRZA0cfEOIAZSFiAAbiAioCAPQgIqLiAAViAhBmYUCP0RMejqrv6fe4nM/dackXHzSOcnffG669eXl4uAPT85+wHAOAcAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFH/PfsBFvHtz3/f/sd//fLNfk/C5/z209e3//GPv/6z35PwOT98/+ftf/z7H9/t9yQRX728vJz9DPO5a93fQhI2d9e6v4UkbO6udX8LSbiXANxh873/lhI8afO9/5YSPGnz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AECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABE/Q9F/rLJMlmKIAAAAABJRU5ErkJggg==">
+<link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAIAAAB7GkOtAAAM5UlEQVR4nO3bu5FlRRZA0cfEOIAZSFiAAbiAioCAPQgIqLiAAViAhBmYUCP0RMejqrv6fe4nM/dackXHzSOcnffG669eXl4uAPT85+wHAOAcAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFH/PfsBFvHtz3/f/sd//fLNfk/C5/z209e3//GPv/6z35PwOT98/+ftf/z7H9/t9yQRX728vJz9DPO5a93fQhI2d9e6v4UkbO6udX8LSbiXANxh873/lhI8afO9/5YSPGnzvf+WEtxIAL7sgL3/lhLc5YC9/5YS3OWAvf+WErxPAD7rlL3/lhK845S9/5YSvOOUvf+WEnySAHzCIKv/mgy8MsjqvyYDrwyy+q/JwCsC8C8Drv5rMnAZcvVfk4HLkKv/mgx8JAD/N/jqv5bNwOCr/1o2A4Ov/msycBGAy1Sr/1oqAxOt/mupDEy0+q/FM1D/n8CTbv/LzE9+r0m3/2XmJ7/XpNv/MvOTb6L7BrDMAl34VWCZBbrwq8AyC7T5KhB9A1hm+1/WOsu1Zbb/Za2zXFtm+1/WOsvtigFYb2Oud6L1NuZ6J1pvY653oi9qfQJab1G+ssDnoPUW5SsLfA5aflF2PgeF3gCW3/6X+c+4/Pa/zH/G5bf/pXHGDyoBmH0z3m7ek86+GW8370k7mzFy0kQA5t2Jj5nxvPPuxMfMeN7ITvyocN71AzDjNnzeXKeecRs+b65TF7bhW8ufevEAzLUHtzXL2efag9ua5ezL78F3rH32lQMwywbcz/gTmGUD7mf8Cay9AW+x8ASWDcD4u+8YI89h/N13jJHnsPDuu8uqc1gzACNvveONOY2Rt97xxpzGqlvvMUtOY80AAPBFCwZgzAvvuUabyZgX3nONNpMlL7xPWm8mqwVgtE03jnEmM9qmG8c4k1lv021lscksFYBxdtyYRpjPODtuTCPMZ7Edt7mV5rNUAAC43ToBGOF6O75zpzTC9XZ8505ppevtfpaZ0iIBsP1vd9asbP/bnTWrZfbaAdaY1SIBAOBeKwTA9f9ex0/M9f9ex09sjSvtkRaY2AoBAOAB0wfA9f8xR87N9f8xR85tgcvsKWaf2/QBAOAxcwfA9f8Zx0zP9f8Zx0xv9mvsuaae3twBAOBhEwfA9f95e8/Q9f95e89w6gvsIOad4cQBAOAZAgAQNWsAfP/Zyn6T9P1nK/tNct5vF6OZdJKzBgCAJwkAQNSUAfD9Z1t7zNP3n23tMc9Jv1oMa8Z5ThkAAJ4nAABR8wXA9589bDtV33/2sO1UZ/xeMb7ppjpfAADYhAAARAkAQJQAAEQJAEDUZAHwE6D9bDVbPwHaz1azne7HKhOZa7aTBQCArQgAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQNRkAfjrl2/OfoRlbTXbH3/9Z5N/h7e2mu3vf3y3yb/DW3PNdrIAALAVAQCIEgCAKAEAiBIAgKj5AuCHQHvYdqp+CLSHbac6149VZjHdVOcLAACbEACAqCkD4CvQtvaYp69A29pjntN9rxjcjPOcMgAAPE8AAKJmDYCvQFvZb5K+Am1lv0nO+NViTJNOctYAAPAkAQCImjgAvgI9b+8Z+gr0vL1nOOm3i6HMO8OJAwDAM+YOgJeAZxwzPS8BzzhmevNeYEcw9fTmDgAAD5s+AF4CHnPk3LwEPObIuU19jT3R7HObPgAAPGaFAHgJuNfxE/MScK/jJzb7ZfZ4C0xshQAA8IBFAuAl4HZnzcpLwO3OmtUCV9rDrDGrRQJw0YDbnDslDbjFuVNaY6/tbZkprRMAAO6yVAC8BLxvhPl4CXjfCPNZ5nq7k5Xms1QALmPsuDGNM5kRdtyYxpnMSjtuW4tNZrUAXEbadOMYbSbjbLpxjDaTxTbdJtabyYIBAOAWawZgtAvvucacxmgX3nONOY31LrzPWHIaawbgMurWO97Icxhz6x1v5DksufUesOoclg3AZezdd4zxJzDy7jvG+BNYdffdbuEJrByAywwbcD+znH38DbifWc6+8Ab8orXPvngALvPswW3NdepZ9uC25jr12nvwc5Y/9foBuMy2DZ8343nn2obPm/G8y2/DVwrnTQTgMudOfMy8J51xJz5m3pMWduIHkZNWAnCZeTPebvYzzrsZbzf7GQubsXDGD756eXk5+xmO9u3Pf5/9CNubffW/8ttPX5/9CNubffW/8sP3f579CNvrrP4PQm8AHy22Ky8rnmixXXlZ8UTr7cr1TvRFxQBc1tqYK53l2kobc6WzXFtpY650ltsVPwFdm/pz0Kqr/5WpPwetuvpfmfpzUHP1fxB9A/ho3h0675Pfa94dOu+T32veHTrvk2+i/gbw0USvAp3V/8pErwKd1f/KRK8C8dX/gQD8y+AZyK7+a4NnILv6rw2eAav/IwH4hAEzYPW/MmAGrP5XBsyA1f+KAHzWIBmw+t8xSAas/ncMkgGr/5ME4MtOKYG9f5dTSmDv3+WUEtj77xOAOxxQAnv/SQeUwN5/0gElsPdvJACP2LwE9v7mNi+Bvb+5zUtg799LALZxVxKs+1PclQTr/hR3JcG6f54AAETV/ycwQJYAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABECQBAlAAARAkAQJQAAEQJAECUAABE/Q9F/rLJMlmKIAAAAABJRU5ErkJggg==">
+<title>Nestlog Baby Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&display=swap">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Nestlog">
+<style>
+body{margin:0}
+
+/* Layout: one calm column on phone; three action tiles side by side on iPad; fixed tab bar at bottom. */
+:root{
+  color-scheme:light;
+  --bg:#FFFFFF; --soft:#F2F4F8; --surface:#FFFFFF; --fg:#151E2B; --muted:#5E6A7D; --line:#E6EAF0;
+  --feed:#2E6AD6; --feed-soft:#E2EBFB;
+  --poop:#9C6610; --poop-soft:#F5EBD8;
+  --sleep:#5948C2; --sleep-soft:#E8E5F8;
+  --warn:#B93D0B; --warn-soft:#FBE7DC;
+  --scrim:rgba(12,18,28,.45);
+  --display:"Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body:"Figtree", -apple-system, "Helvetica Neue", system-ui, sans-serif;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible,input:focus-visible{outline:2px solid var(--feed);outline-offset:2px}
+.app{max-width:960px;margin:0 auto;padding-inline:18px;padding-block:14px 110px}
+.num{font-variant-numeric:tabular-nums}
+
+header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:6px 18px}
+.baby{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:4px 0}
+.baby h1{margin:0;font-family:var(--display);font-weight:700;font-size:1.9rem;letter-spacing:-.01em;line-height:1.1}
+.baby span{color:var(--muted);font-size:.9rem}
+.datechip{color:var(--muted);font-size:.85rem;text-align:right}
+
+.banner{background:var(--warn-soft);color:var(--warn);border-radius:12px;padding:10px 14px;font-size:.88rem;margin-bottom:14px}
+
+.actions{display:grid;gap:12px}
+@media (min-width:700px){.actions{grid-template-columns:repeat(3,1fr)}}
+.act{display:flex;align-items:center;gap:16px;width:100%;text-align:left;border-radius:22px;padding:18px 20px;min-height:104px;transition:transform .12s ease}
+.act:active{transform:scale(.98)}
+@media (min-width:700px){.act{flex-direction:column;align-items:flex-start;min-height:200px;padding:22px}}
+.act .ic{flex:none;width:60px;height:60px;border-radius:50%;display:grid;place-items:center;font-size:32px;line-height:1;background:var(--surface)!important;box-shadow:0 1px 4px rgba(21,30,43,.08)}
+.act .tx{display:flex;flex-direction:column;gap:3px;min-width:0}
+.act b{font-family:var(--display);font-weight:700;font-size:1.6rem;letter-spacing:-.01em}
+.act small{font-size:.9rem;color:var(--muted)}
+.act .since{font-size:.95rem;font-weight:600}
+.act.feed{background:var(--feed-soft)} .act.feed .ic{background:var(--feed)} .act.feed .since{color:var(--feed)}
+.act.poop{background:var(--poop-soft)} .act.poop .ic{background:var(--poop)} .act.poop .since{color:var(--poop)}
+.act.sleep{background:var(--sleep-soft)} .act.sleep .ic{background:var(--sleep)} .act.sleep .since{color:var(--sleep)}
+.act.sleep.on{background:var(--sleep);color:var(--surface)}
+.act.sleep.on .ic{background:var(--surface);color:var(--sleep)}
+.act.sleep.on small,.act.sleep.on .since{color:var(--surface);opacity:.92}
+
+.minor{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
+.mini{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px;text-align:left}
+.mini span{color:var(--muted);font-size:.85rem;display:block}
+.mini>div:first-child{min-width:0}
+.mini b{font-weight:600;font-size:1.05rem;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:430px){.mini{padding:12px}.mini .plus{display:none}.mini b{font-size:.98rem}}
+.field textarea{font:inherit;font-size:1.05rem;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--soft);color:var(--fg);width:100%;min-height:120px;resize:vertical}
+.mini .plus{font-size:1.4rem;color:var(--muted);line-height:1}
+
+.today{margin-top:26px}
+.label{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0 0 10px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);background:var(--surface);border:1px solid var(--line);border-radius:16px}
+.stat{padding:14px 16px}
+.stat+.stat{border-left:1px solid var(--line)}
+.stat b{display:block;font-family:var(--display);font-size:1.5rem;font-weight:700}
+.stat span{color:var(--muted);font-size:.85rem}
+.stat small{display:block;color:var(--muted);font-size:.78rem;margin-top:2px}
+.pastrow{display:flex;justify-content:flex-end;margin-top:6px}
+.linkbtn{color:var(--sleep);font-weight:600;font-size:.92rem;padding:8px 4px}
+.older{display:block;margin:4px auto 0}
+/* trends */
+.trends{display:grid;gap:12px}
+@media (min-width:700px){.trends{grid-template-columns:1fr 1fr}}
+.trend{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px 10px;min-width:0}
+.trend-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.trend-head h3{margin:0;font-family:var(--display);font-size:1.15rem;font-weight:700}
+.trend-head span{color:var(--muted);font-size:.82rem}
+.readout{margin:2px 0 6px;font-size:.95rem;font-weight:600}
+.trend svg{display:block;width:100%;height:auto;overflow:visible}
+.trend .grid{stroke:var(--line);stroke-width:1}
+.trend .tick{fill:var(--muted);font-size:10px;font-family:var(--body)}
+.trend .tick.sel{fill:var(--fg);font-weight:700}
+.trend .hit{fill:transparent;cursor:pointer}
+.trend-empty{color:var(--muted);font-size:.9rem;padding:18px 0 12px}
+
+/* history */
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:16px;scrollbar-width:none}
+.chip{flex:none;padding:8px 14px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font-size:.9rem;font-weight:500}
+.chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.day{margin-bottom:22px}
+.dayhead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.dayhead h2{margin:0;font-family:var(--display);font-size:1.25rem;font-weight:700}
+.dayhead span{color:var(--muted);font-size:.85rem}
+.list{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.row{display:flex;align-items:center;gap:12px;width:100%;padding:12px 16px;text-align:left}
+.row+.row,.row+.rowx,.rowx+.row{border-top:1px solid var(--line)}
+.dot{flex:none;width:10px;height:10px;border-radius:50%}
+.row .main{flex:1;min-width:0}
+.row .main b{font-weight:600;display:block}
+.row .main span{color:var(--muted);font-size:.88rem}
+.row time{color:var(--muted);font-size:.9rem}
+.rowx{display:flex;justify-content:flex-end;gap:8px;padding:0 16px 12px}
+.btn{padding:9px 16px;border-radius:12px;font-weight:600;font-size:.92rem;background:var(--soft)}
+.btn.danger{background:var(--warn);color:var(--surface)}
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:16px;padding:28px 20px;text-align:center;color:var(--muted)}
+.empty b{display:block;color:var(--fg);font-family:var(--display);font-size:1.15rem;margin-bottom:4px}
+.fever{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:999px;background:var(--warn-soft);color:var(--warn);font-size:.75rem;font-weight:700}
+
+/* tab bar */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);display:flex;justify-content:center;gap:8px;padding:8px 16px calc(8px + env(safe-area-inset-bottom,0px));z-index:5}
+nav.tabs button{flex:1;max-width:220px;padding:10px;border-radius:12px;font-weight:600;color:var(--muted)}
+nav.tabs button[aria-selected="true"]{color:var(--fg);background:var(--soft)}
+
+/* sheet */
+.scrim{position:fixed;inset:0;background:var(--scrim);z-index:10;display:flex;align-items:flex-end;justify-content:center}
+@media (min-width:700px){.scrim{align-items:center}}
+.sheet{background:var(--surface);width:100%;max-width:520px;border-radius:24px 24px 0 0;padding:20px 20px calc(20px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:16px;max-height:92%;overflow-y:auto}
+@media (min-width:700px){.sheet{border-radius:24px}}
+.sheet h3{margin:0;font-family:var(--display);font-size:1.5rem}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:6px;background:var(--soft);padding:4px;border-radius:14px}
+.seg button{padding:12px 6px;border-radius:10px;font-weight:600;font-size:.95rem;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:.85rem;color:var(--muted);font-weight:600}
+.field input{font:inherit;font-size:1.05rem;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--soft);color:var(--fg);width:100%}
+.stepper{display:flex;align-items:center;gap:10px}
+.stepper button{width:48px;height:48px;border-radius:14px;background:var(--soft);font-size:1.4rem;font-weight:600}
+.stepper output{flex:1;text-align:center;font-family:var(--display);font-size:1.7rem;font-weight:700}
+.note{font-size:.85rem;color:var(--muted);margin:0}
+.note.warn{color:var(--warn)}
+.sheetbtns{display:grid;grid-template-columns:1fr 2fr;gap:10px}
+.primary{padding:15px;border-radius:14px;font-weight:700;font-size:1.05rem;color:var(--surface)}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:8px 8px 8px 16px;min-height:44px;border-radius:14px;font-size:.92rem;font-weight:600;z-index:20;width:max-content;max-width:calc(100% - 32px);display:flex;align-items:center;gap:12px}
+.toastbtn{background:var(--bg);color:var(--fg);padding:8px 12px;border-radius:10px;font-weight:700;font-size:.88rem;white-space:nowrap}
+@media (prefers-reduced-motion:reduce){.act{transition:none}}
+</style>
+</head>
+<body>
+
+
+<div class="app">
+  <header class="top">
+    <button class="baby" id="babyBtn" aria-label="Edit baby details"><h1 id="babyName">Baby</h1><span id="babyAge">Tap to add name and birthday</span></button>
+    <div class="datechip num" id="clock"></div>
+  </header>
+  <div id="banner" class="banner" hidden></div>
+
+  <main id="viewToday">
+    <div class="actions">
+      <button class="act feed" id="actFeed"><div class="ic" aria-hidden="true">🍼</div><div class="tx"><b>Feed</b><span class="since" id="feedSince">No feeds yet</span><small id="feedLast">Tap to log</small></div></button>
+      <button class="act poop" id="actPoop"><div class="ic" aria-hidden="true">💩</div><div class="tx"><b>Poop</b><span class="since" id="poopSince">No changes yet</span><small id="poopLast">Tap to log</small></div></button>
+      <button class="act sleep" id="actSleep"><div class="ic" aria-hidden="true">😴</div><div class="tx"><b id="sleepLabel">Sleep</b><span class="since" id="sleepSince">No sleeps yet</span><small id="sleepLast">Tap when baby falls asleep</small></div></button>
+    </div>
+    <div class="minor">
+      <button class="mini" id="actWeight"><div><span>Weight</span><b class="num" id="weightLast">Add</b></div><div class="plus" aria-hidden="true">+</div></button>
+      <button class="mini" id="actTemp"><div><span>Temp</span><b class="num" id="tempLast">Add</b></div><div class="plus" aria-hidden="true">+</div></button>
+      <button class="mini" id="actNote"><div><span>Note</span><b class="num" id="noteLast">Add</b></div><div class="plus" aria-hidden="true">+</div></button>
+    </div>
+    <div class="pastrow"><button class="linkbtn" id="addPastSleep">+ Add a past sleep</button></div>
+    <section class="today">
+      <p class="label">Today so far</p>
+      <div class="stats">
+        <div class="stat"><b class="num" id="stFeeds">0</b><span>Feeds</span></div>
+        <div class="stat"><b class="num" id="stDiapers">0</b><span>Diapers</span><small class="num" id="stSplit"></small></div>
+        <div class="stat"><b class="num" id="stSleep">0h</b><span>Sleep</span></div>
+      </div>
+    </section>
+  </main>
+
+  <main id="viewTrends" hidden>
+    <p class="label">Last 7 days</p>
+    <div class="trends" id="trendsBox"></div>
+  </main>
+
+  <main id="viewHistory" hidden>
+    <div class="chips" id="chips" role="group" aria-label="Filter"></div>
+    <div id="historyList"></div>
+  </main>
+</div>
+
+<nav class="tabs" role="tablist">
+  <button role="tab" id="tabToday" aria-selected="true">Today</button>
+  <button role="tab" id="tabTrends" aria-selected="false">Trends</button>
+  <button role="tab" id="tabHistory" aria-selected="false">History</button>
+</nav>
+<div id="sheetRoot"></div>
+
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let db=null, histLimit=1500, moreAvailable=false, entries=[], sleepStart=null, baby={}, tab="today", filter="all", openRow=null, confirmRow=null;
+
+/* ---------- formatting ---------- */
+const MIN=60000, HR=3600000, DAY=86400000;
+function dur(ms){ms=Math.max(0,ms);const h=Math.floor(ms/HR),m=Math.floor(ms%HR/MIN);return h?`${h}h ${m}m`:`${m}m`;}
+function ago(t){const d=Date.now()-t;return d<MIN?"Just now":dur(d)+" ago";}
+function hhmm(t){return new Date(t).toLocaleTimeString([], {hour:"numeric",minute:"2-digit"});}
+function dayStart(t){const d=new Date(t);d.setHours(0,0,0,0);return d.getTime();}
+function dayName(t){const s=dayStart(t),n=dayStart(Date.now());if(s===n)return"Today";if(s===n-DAY)return"Yesterday";return new Date(t).toLocaleDateString([], {weekday:"short",month:"short",day:"numeric"});}
+function localInput(t){const d=new Date(t-new Date(t).getTimezoneOffset()*MIN);return d.toISOString().slice(0,16);}
+function fromInput(v){const t=new Date(v).getTime();return isNaN(t)?Date.now():t;}
+const kgToLb=kg=>kg*2.20462;
+function weightText(kg){const lb=kgToLb(kg),whole=Math.floor(lb),oz=Math.round((lb-whole)*16);return `${kg.toFixed(2)} kg (${whole} lb ${oz} oz)`;}
+
+function describe(e){
+  if(e.type==="feed"){
+    if(!e.method) return {title:"Feed", detail:"Tap to add details"};
+    if(e.method==="bottle") return {title:"Bottle", detail:`${e.amount||0} mL ${e.milk==="formula"?"formula":"breast milk"}`};
+    return {title:e.method==="left"?"Breast, left":"Breast, right", detail:e.minutes?`${e.minutes} min`:"Breastfeed"};
+  }
+  if(e.type==="poop"){
+    if(!e.kind) return {title:"Poop", detail:"Tap to add details"};
+    return {title:e.kind==="wet"?"Wet diaper":e.kind==="dirty"?"Dirty diaper":"Wet + dirty", detail:"Diaper change"};
+  }
+  if(e.type==="sleep") return {title:"Sleep", detail:`${dur(e.end-e.at)}, until ${hhmm(e.end)}`};
+  if(e.type==="weight") return {title:"Weight", detail:weightText(e.kg)};
+  if(e.type==="note") return {title:"Note", detail:e.text||""};
+  if(e.type==="temp") return {title:"Temperature", detail:`${e.c.toFixed(1)} °C`, fever:e.c>=38};
+  return {title:e.type,detail:""};
+}
+const colorOf={feed:"var(--feed)",poop:"var(--poop)",sleep:"var(--sleep)",weight:"var(--muted)",temp:"var(--warn)",note:"var(--fg)"};
+
+/* ---------- render ---------- */
+function latest(type){return entries.find(e=>e.type===type);}
+function sleepIn(from,to){let ms=0;for(const e of entries){if(e.type!=="sleep")continue;ms+=Math.max(0,Math.min(e.end,to)-Math.max(e.at,from));}
+  if(sleepStart) ms+=Math.max(0,Math.min(Date.now(),to)-Math.max(sleepStart,from));return ms;}
+
+function renderToday(){
+  $("clock").textContent=new Date().toLocaleDateString([], {weekday:"long",month:"short",day:"numeric"});
+  $("babyName").textContent=baby.name||"Baby";
+  if(baby.born){const days=Math.floor((dayStart(Date.now())-dayStart(baby.born))/DAY);
+    $("babyAge").textContent=days<0?"Due soon":days<14?`${days} day${days===1?"":"s"} old`:days<84?`${Math.floor(days/7)} weeks old`:`${Math.floor(days/30.44)} months old`;}
+  else $("babyAge").textContent="Tap to add name and birthday";
+
+  const f=latest("feed");
+  $("feedSince").textContent=f?ago(f.at):"No feeds yet";
+  const lb=entries.find(e=>e.type==="feed"&&e.method);
+  const next=lb&&lb.method!=="bottle"?` · Next: ${lb.method==="left"?"Right":"Left"}`:"";
+  $("feedLast").textContent=(f?(f.method?`${describe(f).title} · ${describe(f).detail} at ${hhmm(f.at)}`:`Logged at ${hhmm(f.at)}`):"One tap logs a feed")+next;
+  const p=latest("poop");
+  $("poopSince").textContent=p?ago(p.at):"None logged yet";
+  $("poopLast").textContent=p?(p.kind?`${describe(p).title} at ${hhmm(p.at)}`:`Logged at ${hhmm(p.at)} · tap to log`):"One tap logs a diaper";
+
+  const sb=$("actSleep");
+  if(sleepStart){sb.classList.add("on");$("sleepLabel").textContent="Asleep";
+    $("sleepSince").textContent=dur(Date.now()-sleepStart);$("sleepLast").textContent=`Since ${hhmm(sleepStart)} · tap when awake`;}
+  else{sb.classList.remove("on");$("sleepLabel").textContent="Sleep";const s=latest("sleep");
+    $("sleepSince").textContent=s?`Awake ${dur(Date.now()-s.end)}`:"No sleeps yet";
+    $("sleepLast").textContent=s?`Last nap ${dur(s.end-s.at)} · tap to start`:"Tap when baby falls asleep";}
+
+  const w=latest("weight");$("weightLast").textContent=w?`${w.kg.toFixed(2)} kg`:"Add";
+  const t=latest("temp");$("tempLast").textContent=t?`${t.c.toFixed(1)} °C`:"Add";
+  const nt=latest("note");$("noteLast").textContent=nt?ago(nt.at):"Add";
+
+  const s0=dayStart(Date.now()),s1=s0+DAY;
+  $("stFeeds").textContent=entries.filter(e=>e.type==="feed"&&e.at>=s0).length;
+  const dz=entries.filter(e=>e.type==="poop"&&e.at>=s0);
+  $("stDiapers").textContent=dz.length;
+  const wet=dz.filter(e=>e.kind==="wet"||e.kind==="both").length,dirty=dz.filter(e=>e.kind==="dirty"||e.kind==="both").length;
+  $("stSplit").textContent=dz.length?`${wet} wet · ${dirty} dirty`:"";
+  $("stSleep").textContent=dur(sleepIn(s0,s1));
+}
+
+const FILTERS=[["all","All"],["feed","Feeds"],["poop","Diapers"],["sleep","Sleep"],["weight","Weight"],["temp","Temperature"],["note","Notes"]];
+function renderHistory(){
+  $("chips").innerHTML=FILTERS.map(([k,l])=>`<button class="chip" data-f="${k}" aria-pressed="${filter===k}">${l}</button>`).join("");
+  const list=entries.filter(e=>filter==="all"||e.type===filter);
+  if(!list.length){$("historyList").innerHTML=`<div class="empty"><b>Nothing logged yet</b>Entries from Feed, Poop, Sleep, Weight, Temp and Notes show up here, grouped by day.</div>`;return;}
+  const groups=new Map();
+  for(const e of list){const k=dayStart(e.at);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(e);}
+  let html="";
+  for(const [k,items] of groups){
+    const all=entries.filter(e=>dayStart(e.at)===k);
+    const sum=`${all.filter(e=>e.type==="feed").length} feeds · ${all.filter(e=>e.type==="poop").length} diapers · ${dur(sleepIn(k,k+DAY))} sleep`;
+    html+=`<section class="day"><div class="dayhead"><h2>${dayName(k)}</h2><span class="num">${sum}</span></div><div class="list">`;
+    for(const e of items){const d=describe(e);
+      html+=`<button class="row" data-id="${esc(e.id)}" aria-expanded="${openRow===e.id}"><span class="dot" style="background:${colorOf[e.type]}"></span><span class="main"><b>${esc(d.title)}${d.fever?'<span class="fever">Fever</span>':""}</b><span class="num">${esc(d.detail)}</span></span><time class="num">${hhmm(e.at)}</time></button>`;
+      if(openRow===e.id) html+= confirmRow===e.id
+        ? `<div class="rowx"><button class="btn" data-cancel>Keep</button><button class="btn danger" data-del="${esc(e.id)}">Delete entry</button></div>`
+        : `<div class="rowx">${e.type==="feed"||e.type==="poop"?`<button class="btn" data-edit="${esc(e.id)}">${(e.method||e.kind)?"Edit details":"Add details"}</button>`:`<button class="btn" data-edit="${esc(e.id)}">${e.type==="note"?"Edit note":"Edit"}</button>`}<button class="btn" data-ask="${esc(e.id)}">Delete…</button></div>`;
+    }
+    html+=`</div></section>`;
+  }
+  if(moreAvailable)html+=`<button class="btn older" data-older>Show older entries</button>`;
+  $("historyList").innerHTML=html;
+}
+/* ---------- trends ---------- */
+const trendSel={};
+function niceMax(v){if(!(v>0))return 1;const p=Math.pow(10,Math.floor(Math.log10(v))),n=v/p;return ([1,1.2,1.6,2,2.4,3,4,5,6,8,10].find(s=>n<=s))*p;}
+function tickTxt(v){return Number.isInteger(v)?String(v):v.toFixed(1);}
+function barCard(key,title,vals,days,color,fmt,avgTxt,unit=""){
+  const W=320,H=128,pl=26,pt=8,pb=22,ch=H-pt-pb,max=niceMax(Math.max(...vals)),slot=(W-pl)/7,bw=Math.min(26,slot-8);
+  const sel=trendSel[key]??6;
+  let g=`<line class="grid" x1="${pl}" x2="${W}" y1="${pt}" y2="${pt}"/><line class="grid" x1="${pl}" x2="${W}" y1="${pt+ch/2}" y2="${pt+ch/2}"/><line class="grid" x1="${pl}" x2="${W}" y1="${pt+ch}" y2="${pt+ch}"/>`;
+  g+=`<text class="tick" x="${pl-6}" y="${pt+3}" text-anchor="end">${tickTxt(max)}${unit}</text><text class="tick" x="${pl-6}" y="${pt+ch+3}" text-anchor="end">0</text>`;
+  vals.forEach((v,i)=>{
+    const h=v/max*ch,x=pl+i*slot+(slot-bw)/2,y=pt+ch-h,r=Math.min(4,h,bw/2),base=pt+ch;
+    if(h>0)g+=`<path d="M${x},${base}V${y+r}Q${x},${y} ${x+r},${y}H${x+bw-r}Q${x+bw},${y} ${x+bw},${y+r}V${base}Z" fill="${color}" opacity="${i===sel?1:.55}"/>`;
+    g+=`<text class="tick${i===sel?" sel":""}" x="${pl+i*slot+slot/2}" y="${H-6}" text-anchor="middle">${new Date(days[i]).toLocaleDateString([], {weekday:"narrow"})}</text>`;
+    g+=`<rect class="hit" data-chart="${key}" data-i="${i}" x="${pl+i*slot}" y="0" width="${slot}" height="${H}"><title>${dayName(days[i])}: ${fmt(v)}</title></rect>`;
+  });
+  const label=vals.map((v,i)=>`${dayName(days[i])} ${fmt(v)}`).join(", ");
+  return `<section class="trend"><div class="trend-head"><h3>${title}</h3><span class="num">${avgTxt}</span></div>
+    <p class="readout num">${dayName(days[sel])} · ${fmt(vals[sel])}</p>
+    <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(title)}: ${esc(label)}">${g}</svg></section>`;
+}
+function weightCard(){
+  const pts=entries.filter(e=>e.type==="weight").sort((a,b)=>a.at-b.at);
+  if(pts.length<2)return `<section class="trend"><div class="trend-head"><h3>Weight</h3><span>All weigh-ins</span></div><p class="trend-empty">Add at least two weigh-ins to see the trend.</p></section>`;
+  const W=320,H=128,pl=34,pr=10,pt=10,pb=22,ch=H-pt-pb,cw=W-pl-pr;
+  let lo=Math.min(...pts.map(p=>p.kg)),hi=Math.max(...pts.map(p=>p.kg));
+  if(hi-lo<0.2){const m=(hi+lo)/2;lo=m-0.1;hi=m+0.1;}const padv=(hi-lo)*0.15;lo-=padv;hi+=padv;
+  const t0=pts[0].at,t1=pts[pts.length-1].at,span=Math.max(t1-t0,1);
+  const X=t=>pl+(t-t0)/span*cw,Y=k=>pt+(hi-k)/(hi-lo)*ch;
+  const sel=Math.min(trendSel.weight??pts.length-1,pts.length-1);
+  let g=`<line class="grid" x1="${pl}" x2="${W-pr}" y1="${pt}" y2="${pt}"/><line class="grid" x1="${pl}" x2="${W-pr}" y1="${pt+ch}" y2="${pt+ch}"/>`;
+  g+=`<text class="tick" x="${pl-6}" y="${pt+3}" text-anchor="end">${hi.toFixed(1)}</text><text class="tick" x="${pl-6}" y="${pt+ch+3}" text-anchor="end">${lo.toFixed(1)}</text>`;
+  g+=`<polyline points="${pts.map(p=>`${X(p.at).toFixed(1)},${Y(p.kg).toFixed(1)}`).join(" ")}" fill="none" stroke="var(--fg)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+  pts.forEach((p,i)=>{g+=`<circle cx="${X(p.at)}" cy="${Y(p.kg)}" r="${i===sel?5:4}" fill="${i===sel?"var(--fg)":"var(--surface)"}" stroke="var(--fg)" stroke-width="2"/>`;
+    g+=`<circle class="hit" data-chart="weight" data-i="${i}" cx="${X(p.at)}" cy="${Y(p.kg)}" r="14"><title>${weightText(p.kg)}</title></circle>`;});
+  const fmtD=t=>new Date(t).toLocaleDateString([], {month:"short",day:"numeric"});
+  g+=`<text class="tick" x="${pl}" y="${H-6}">${fmtD(t0)}</text><text class="tick" x="${W-pr}" y="${H-6}" text-anchor="end">${fmtD(t1)}</text>`;
+  const ch2=pts[pts.length-1].kg-pts[0].kg;
+  return `<section class="trend"><div class="trend-head"><h3>Weight</h3><span class="num">${ch2>=0?"+":"−"}${Math.abs(ch2*1000).toFixed(0)} g since ${fmtD(t0)}</span></div>
+    <p class="readout num">${fmtD(pts[sel].at)} · ${weightText(pts[sel].kg)}</p>
+    <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Weight: ${esc(pts.map(p=>fmtD(p.at)+" "+p.kg.toFixed(2)+" kg").join(", "))}">${g}</svg></section>`;
+}
+function renderTrends(){
+  const d0=dayStart(Date.now()),days=[];for(let i=6;i>=0;i--){const d=new Date(d0);d.setDate(d.getDate()-i);days.push(d.getTime());}
+  const end=k=>{const d=new Date(k);d.setDate(d.getDate()+1);return d.getTime();};
+  const count=type=>days.map(k=>entries.filter(e=>e.type===type&&e.at>=k&&e.at<end(k)).length);
+  const feeds=count("feed"),diapers=count("poop"),sleep=days.map(k=>sleepIn(k,end(k))/HR);
+  const avg=a=>a.reduce((s,v)=>s+v,0)/a.length;
+  const n=v=>`${v}`;
+  $("trendsBox").innerHTML=
+    barCard("feeds","Feeds",feeds,days,"var(--feed)",v=>`${v} feed${v===1?"":"s"}`,`Avg ${avg(feeds).toFixed(1)} a day`)+
+    barCard("diapers","Diapers",diapers,days,"var(--poop)",v=>`${v} diaper${v===1?"":"s"}`,`Avg ${avg(diapers).toFixed(1)} a day`)+
+    barCard("sleep","Sleep",sleep,days,"var(--sleep)",v=>dur(v*HR),`Avg ${dur(avg(sleep)*HR)} a day`,"h")+
+    weightCard();
+}
+function render(){renderToday();if(tab==="history")renderHistory();if(tab==="trends")renderTrends();}
+
+/* ---------- data ---------- */
+let toastEl=null,toastTimer=null;
+function toast(msg,acts){
+  if(toastEl)toastEl.remove();clearTimeout(toastTimer);
+  const t=document.createElement("div");t.className="toast";
+  const s=document.createElement("span");s.textContent=msg;t.appendChild(s);
+  (acts||[]).forEach(([label,fn])=>{const b=document.createElement("button");b.className="toastbtn";b.textContent=label;
+    b.onclick=()=>{t.remove();if(toastEl===t)toastEl=null;fn();};t.appendChild(b);});
+  document.body.appendChild(t);toastEl=t;
+  toastTimer=setTimeout(()=>{t.remove();if(toastEl===t)toastEl=null;},acts&&acts.length?7000:2600);
+}
+const API="https://jbmsdmrvthzprsjbbbcq.supabase.co/rest/v1/rpc/";
+const KEY="sb_publishable_9iJ9K7CE2u7hW4qoKa8c5g_8gtBiDnm";
+let code="";
+async function rpc(fn,args){
+  const r=await fetch(API+fn,{method:"POST",headers:{apikey:KEY,"Content-Type":"application/json"},body:JSON.stringify({p_code:code,...(args||{})})});
+  const t=await r.text();
+  if(!r.ok){const err=new Error(t);err.badCode=/Wrong family code/.test(t);throw err;}
+  return t?JSON.parse(t):null;
+}
+function saveError(e){if(e&&e.badCode){askCode(true);return;}toast("Couldn't save. Check your connection and try again.");}
+let busy=0;
+async function refresh(){
+  if(!code||busy)return;
+  try{const d=await rpc("nest_list_n",{p_limit:histLimit});if(busy)return;
+    entries=d.entries||[];moreAvailable=entries.length>=histLimit;const st=d.state||{};sleepStart=(st.current&&st.current.sleepStart)||null;baby=st.baby||{};
+    $("banner").hidden=true;render();}
+  catch(e){if(e.badCode)askCode(true);else{const b=$("banner");b.hidden=false;b.textContent="Offline. Showing the last loaded log; new taps may not save.";}}
+}
+function loadOlder(){histLimit+=1500;toast("Loading older entries…");refresh();}
+async function write(fn,args){busy++;try{return await rpc(fn,args);}catch(e){saveError(e);throw e;}finally{busy--;}}
+const pending={};
+function addEntry(obj){
+  const tmp="tmp"+Math.random().toString(36).slice(2);
+  entries.unshift({id:tmp,...obj});entries.sort((a,b)=>b.at-a.at);render();
+  pending[tmp]=write("nest_add",{p_entry:obj}).then(id=>{entries=entries.map(e=>e.id===tmp?{...e,id}:e);if(openRow===tmp)openRow=id;render();return id;}).catch(()=>{entries=entries.filter(e=>e.id!==tmp);render();return null;});
+  return tmp;
+}
+async function realId(id){return id.startsWith("tmp")?await pending[id]:id;}
+async function setEntry(id,obj){
+  entries=entries.map(e=>e.id===id?{id,...obj}:e).sort((a,b)=>b.at-a.at);render();
+  const rid=await realId(id);if(!rid)return;
+  try{await write("nest_set",{p_id:rid,p_entry:obj});}catch(e){}
+  refresh();
+}
+const byId=id=>entries.find(e=>e.id===id);
+function quickLog(type){
+  const at=Date.now();const id=addEntry({type,at});
+  const find=()=>byId(id)||entries.find(x=>x.at===at&&x.type===type)||{id,type,at};
+  const open=()=>{const e=find();type==="feed"?feedSheet(e):poopSheet(e);};
+  toast(type==="feed"?`Feed logged at ${hhmm(at)}`:`Poop logged at ${hhmm(at)}`,[["Undo",()=>{delEntry(find().id);toast("Removed");}],["Add details",open]]);
+}
+async function delEntry(id){
+  entries=entries.filter(e=>e.id!==id);render();
+  const rid=await realId(id);if(!rid)return;
+  try{await write("nest_remove",{p_id:rid});}catch(e){refresh();}
+}
+
+/* ---------- sheets ---------- */
+function openSheet(html,onMount,locked){
+  $("sheetRoot").innerHTML=`<div class="scrim" id="scrim"><div class="sheet" role="dialog" aria-modal="true">${html}</div></div>`;
+  $("scrim").addEventListener("click",e=>{if((!locked&&e.target.id==="scrim")||e.target.closest("[data-close]"))closeSheet();});
+  onMount&&onMount($("scrim").querySelector(".sheet"));
+}
+function closeSheet(){$("sheetRoot").innerHTML="";}
+function seg(name,opts,cur){return `<div class="seg" data-seg="${name}">${opts.map(([v,l])=>`<button type="button" data-v="${v}" aria-pressed="${v===cur}">${l}</button>`).join("")}</div>`;}
+function bindSeg(root,name,cb){root.querySelector(`[data-seg="${name}"]`).addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
+  root.querySelectorAll(`[data-seg="${name}"] button`).forEach(x=>x.setAttribute("aria-pressed",x===b));cb(b.dataset.v);});}
+const timeField=`<div class="field"><label for="fTime">Time</label><input type="datetime-local" id="fTime"></div>`;
+const btns=(color,label)=>`<div class="sheetbtns"><button class="btn" data-close>Cancel</button><button class="primary" id="fSave" style="background:${color}">${label}</button></div>`;
+
+function feedSheet(cur){
+  const last=entries.find(e=>e.type==="feed"&&e.method&&e.id!==cur.id);
+  let method=cur.method||(last&&last.method==="left"?"right":last&&last.method==="right"?"left":(last?.method||"left"));
+  let amount=cur.amount||last?.amount||60, minutes=cur.minutes||last?.minutes||15, milk=cur.milk||last?.milk||"breast";
+  openSheet(`<h3>Feed</h3>${seg("m",[["left","Breast L"],["right","Breast R"],["bottle","Bottle"]],method)}
+    <div id="breastBox"><div class="field"><label>Duration</label><div class="stepper"><button type="button" data-d="-5">−</button><output class="num" id="minOut"></output><button type="button" data-d="5">+</button></div></div></div>
+    <div id="bottleBox"><div class="field"><label>Amount</label><div class="stepper"><button type="button" data-a="-10">−</button><output class="num" id="amtOut"></output><button type="button" data-a="10">+</button></div></div>
+    <div style="margin-top:12px">${seg("k",[["breast","Breast milk"],["formula","Formula"]],milk)}</div></div>
+    ${timeField}${btns("var(--feed)","Save details")}`, root=>{
+      $("fTime").value=localInput(cur.at);
+      const upd=()=>{$("minOut").textContent=`${minutes} min`;$("amtOut").textContent=`${amount} mL`;
+        $("breastBox").hidden=method==="bottle";$("bottleBox").hidden=method!=="bottle";};
+      upd();
+      bindSeg(root,"m",v=>{method=v;upd();});bindSeg(root,"k",v=>{milk=v;});
+      root.addEventListener("click",e=>{const d=e.target.closest("[data-d]"),a=e.target.closest("[data-a]");
+        if(d){minutes=Math.max(0,Math.min(90,minutes+ +d.dataset.d));upd();}
+        if(a){amount=Math.max(0,Math.min(300,amount+ +a.dataset.a));upd();}});
+      $("fSave").onclick=()=>{const at=fromInput($("fTime").value);
+        setEntry(cur.id,method==="bottle"?{type:"feed",method,amount,milk,at}:{type:"feed",method,minutes,at});closeSheet();toast("Feed details saved");};
+    });
+}
+function poopSheet(cur){
+  let kind=cur.kind||"dirty";
+  openSheet(`<h3>Poop details</h3>${seg("p",[["wet","Wet"],["dirty","Dirty"],["both","Both"]],kind)}
+    ${timeField}${btns("var(--poop)","Save details")}`, root=>{
+      $("fTime").value=localInput(cur.at);
+      bindSeg(root,"p",v=>{kind=v;});
+      $("fSave").onclick=()=>{setEntry(cur.id,{type:"poop",kind,at:fromInput($("fTime").value)});closeSheet();toast("Poop details saved");};
+    });
+}
+function generalNoteSheet(cur){
+  openSheet(`<h3>Note</h3>
+    <div class="field"><label for="fText">What happened?</label><textarea id="fText" maxlength="1000" placeholder="Doctor's visit, first smile, questions for the pediatrician…"></textarea></div>
+    ${timeField}${btns("var(--fg)","Save note")}`, ()=>{
+      $("fTime").value=localInput(cur?cur.at:Date.now());$("fText").value=cur?.text||"";$("fText").focus();
+      $("fSave").onclick=()=>{const text=$("fText").value.trim();if(!text){toast("Write a note first");return;}
+        const obj={type:"note",text,at:fromInput($("fTime").value)};
+        if(cur)setEntry(cur.id,obj);else addEntry(obj);closeSheet();toast("Note saved");};
+    });
+}
+function sleepSheet(cur){
+  const now=Date.now(),st=cur?cur.at:now-HR,en=cur?cur.end:now;
+  openSheet(`<h3>${cur?"Edit sleep":"Add a past sleep"}</h3>
+    <div class="field"><label for="fStart">Fell asleep</label><input type="datetime-local" id="fStart"></div>
+    <div class="field"><label for="fEnd">Woke up</label><input type="datetime-local" id="fEnd"></div>
+    <p class="note num" id="sDur"></p>
+    ${btns("var(--sleep)",cur?"Save sleep":"Add sleep")}`,()=>{
+      $("fStart").value=localInput(st);$("fEnd").value=localInput(en);
+      const upd=()=>{const a=fromInput($("fStart").value),b=fromInput($("fEnd").value);$("sDur").textContent=b>a?`Duration: ${dur(b-a)}`:"Wake time must be after the sleep time.";};
+      upd();$("fStart").oninput=upd;$("fEnd").oninput=upd;
+      $("fSave").onclick=()=>{const a=fromInput($("fStart").value),b=fromInput($("fEnd").value);
+        if(!(b>a)){toast("Wake time must be after the sleep time");return;}
+        if(b-a>16*HR){toast("That's over 16 hours. Check the times.");return;}
+        if(b>Date.now()+MIN){toast("Wake time can't be in the future");return;}
+        const obj={type:"sleep",at:a,end:b};if(cur)setEntry(cur.id,obj);else addEntry(obj);closeSheet();toast(cur?"Sleep updated":"Sleep added");};
+    });
+}
+function weightSheet(cur){
+  let unit="kg";const w=cur||latest("weight");
+  openSheet(`<h3>Weight</h3>${seg("u",[["kg","kg"],["lb","lb"]],unit)}
+    <div class="field"><label for="fW" id="wLab">Weight in kg</label><input id="fW" type="number" inputmode="decimal" step="0.01" min="0.5" max="30" placeholder="${w?w.kg.toFixed(2):"3.40"}"></div>
+    ${timeField}${btns("var(--fg)","Save weight")}`, root=>{
+      $("fTime").value=localInput(cur?cur.at:Date.now());if(cur)$("fW").value=cur.kg.toFixed(2);
+      bindSeg(root,"u",v=>{if(v!==unit){const cv=parseFloat($("fW").value);if(cv>0)$("fW").value=(v==="lb"?kgToLb(cv):cv/2.20462).toFixed(2);}unit=v;$("wLab").textContent=`Weight in ${v}`;$("fW").placeholder=v==="kg"?(w?w.kg.toFixed(2):"3.40"):(w?kgToLb(w.kg).toFixed(2):"7.50");});
+      $("fSave").onclick=()=>{const v=parseFloat($("fW").value);if(!(v>0)){toast("Enter a weight first");return;}
+        const kg=unit==="kg"?v:v/2.20462;const obj={type:"weight",kg:Math.round(kg*1000)/1000,at:fromInput($("fTime").value)};
+        if(cur)setEntry(cur.id,obj);else addEntry(obj);closeSheet();toast(cur?"Weight updated":"Weight logged");};
+    });
+}
+function tempSheet(cur){
+  openSheet(`<h3>Temperature</h3>
+    <div class="field"><label for="fT">Temperature in °C</label><input id="fT" type="number" inputmode="decimal" step="0.1" min="33" max="43" placeholder="36.8"></div>
+    <p class="note" id="tNote">Normal for a newborn is about 36.5 to 37.5 °C.</p>
+    ${timeField}${btns("var(--warn)","Save temperature")}`, root=>{
+      $("fTime").value=localInput(cur?cur.at:Date.now());if(cur)$("fT").value=cur.c.toFixed(1);
+      $("fT").addEventListener("input",()=>{const v=parseFloat($("fT").value),n=$("tNote");
+        if(v>=38){n.className="note warn";n.textContent="38.0 °C or higher in a baby under 3 months: call your doctor or go to emergency now.";}
+        else{n.className="note";n.textContent="Normal for a newborn is about 36.5 to 37.5 °C.";}});
+      $("fSave").onclick=()=>{const v=parseFloat($("fT").value);if(!(v>30&&v<45)){toast("Enter a temperature first");return;}
+        const obj={type:"temp",c:Math.round(v*10)/10,at:fromInput($("fTime").value)};if(cur)setEntry(cur.id,obj);else addEntry(obj);closeSheet();toast(v>=38?"Saved. 38 °C or higher: call your doctor.":"Temperature logged");};
+    });
+}
+function babySheet(){
+  openSheet(`<h3>Baby details</h3>
+    <div class="field"><label for="fName">Name</label><input id="fName" maxlength="40" placeholder="Baby's name"></div>
+    <div class="field"><label for="fBorn">Birthday</label><input id="fBorn" type="date"></div>
+    ${btns("var(--fg)","Save")}`, ()=>{
+      $("fName").value=baby.name||"";if(baby.born)$("fBorn").value=new Date(baby.born).toISOString().slice(0,10);
+      $("fSave").onclick=async()=>{const name=$("fName").value.trim(),bv=$("fBorn").value;
+        const born=bv?new Date(bv+"T12:00").getTime():null;baby={name,born};closeSheet();render();
+        try{await write("nest_state_set",{p_key:"baby",p_value:{name,born}});}catch(e){}};
+    });
+}
+
+/* ---------- events ---------- */
+$("actFeed").onclick=()=>quickLog("feed");
+$("actPoop").onclick=()=>quickLog("poop");
+$("actWeight").onclick=()=>weightSheet(null);
+$("actTemp").onclick=()=>tempSheet(null);
+$("addPastSleep").onclick=()=>sleepSheet(null);
+$("actNote").onclick=()=>generalNoteSheet(null);
+$("babyBtn").onclick=babySheet;
+let sleepOp=Promise.resolve();
+const clearSleep=async()=>{try{await write("nest_state_set",{p_key:"current",p_value:{sleepStart:null}});}catch(e){}refresh();};
+$("actSleep").onclick=async()=>{
+  await sleepOp;
+  if(sleepStart){const at=sleepStart,end=Date.now();sleepStart=null;
+    if(end-at<MIN){render();toast("Under a minute, so it wasn't saved");sleepOp=clearSleep();return;}
+    entries.unshift({id:"tmpsleep",type:"sleep",at,end});entries.sort((a,b)=>b.at-a.at);render();toast(`Slept ${dur(end-at)}`);}
+  else{sleepStart=Date.now();render();
+    toast("Sleep timer started",[["Undo",async()=>{sleepStart=null;render();toast("Timer cancelled");await sleepOp;sleepOp=clearSleep();}]]);}
+  sleepOp=write("nest_sleep").catch(()=>{}).then(refresh);
+};
+function setTab(t){tab=t;
+  for(const [v,b,k] of [["viewToday","tabToday","today"],["viewTrends","tabTrends","trends"],["viewHistory","tabHistory","history"]]){$(v).hidden=t!==k;$(b).setAttribute("aria-selected",t===k);}
+  render();window.scrollTo(0,0);}
+$("tabTrends").onclick=()=>setTab("trends");
+$("trendsBox").addEventListener("click",e=>{const h=e.target.closest("[data-chart]");if(h){trendSel[h.dataset.chart]=+h.dataset.i;renderTrends();}});
+$("tabToday").onclick=()=>setTab("today");
+$("tabHistory").onclick=()=>setTab("history");
+$("chips").addEventListener("click",e=>{const b=e.target.closest("[data-f]");if(b){filter=b.dataset.f;openRow=null;renderHistory();}});
+$("historyList").addEventListener("click",e=>{
+  const ed=e.target.closest("[data-edit]");
+  if(e.target.closest("[data-older]")){loadOlder();return;}
+  if(ed){const en=byId(ed.dataset.edit);if(en)({feed:feedSheet,poop:poopSheet,sleep:sleepSheet,weight:weightSheet,temp:tempSheet,note:generalNoteSheet}[en.type]||generalNoteSheet)(en);return;}
+  const del=e.target.closest("[data-del]"),ask=e.target.closest("[data-ask]"),cancel=e.target.closest("[data-cancel]"),row=e.target.closest(".row");
+  if(del){delEntry(del.dataset.del);openRow=confirmRow=null;renderHistory();return;}
+  if(ask){confirmRow=ask.dataset.ask;renderHistory();return;}
+  if(cancel){confirmRow=null;openRow=null;renderHistory();return;}
+  if(row){openRow=openRow===row.dataset.id?null:row.dataset.id;confirmRow=null;renderHistory();}
+});
+setInterval(()=>{if(document.hidden)return;renderToday();refresh();},20000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden){render();refresh();}});
+
+/* ---------- family code ---------- */
+function askCode(wrong){
+  openSheet(`<h3>Family code</h3>
+    <p class="note${wrong?" warn":""}">${wrong?"That code didn't work. Check it and try again.":"Enter the family code once on this device to open your shared log."}</p>
+    <div class="field"><label for="fCode">Code</label><input id="fCode" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="nest-…"></div>
+    <div class="sheetbtns" style="grid-template-columns:1fr"><button class="primary" id="fSave" style="background:var(--fg)">Open log</button></div>`,()=>{
+      $("fSave").onclick=()=>{const v=$("fCode").value.trim();if(!v)return;code=v;try{localStorage.setItem("nestCode",v);}catch(e){}closeSheet();refresh();};
+    },true);
+}
+
+/* ---------- boot ---------- */
+render();
+const fromHash=(location.hash.match(/c=([\w-]+)/)||[])[1];
+try{code=fromHash||localStorage.getItem("nestCode")||"";if(fromHash)localStorage.setItem("nestCode",fromHash);}catch(e){code=fromHash||"";}
+if(code)refresh();else askCode(false);
+})();
+</script>
+
+</body>
+</html>
