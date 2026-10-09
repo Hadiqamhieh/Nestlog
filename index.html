@@ -37,9 +37,14 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--feed);outline-o
 .num{font-variant-numeric:tabular-nums}
 
 header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:6px 18px}
-.baby{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:4px 0}
-.baby h1{margin:0;font-family:var(--display);font-weight:700;font-size:1.9rem;letter-spacing:-.01em;line-height:1.1}
-.baby span{color:var(--muted);font-size:.9rem}
+@media (max-width:520px){header.top .datechip{display:none}}
+.baby{display:flex;align-items:center;gap:12px;text-align:left;padding:8px 14px 8px 8px;border-radius:20px;background:var(--soft);border:1.5px solid var(--line);min-width:0;max-width:100%;transition:transform .12s ease}
+.baby:active{transform:scale(.98)}
+.baby .av{flex:none;width:48px;height:48px;border-radius:50%;background:var(--feed);color:var(--surface);display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:1.35rem}
+.baby .bt{display:flex;flex-direction:column;gap:1px;min-width:0}
+.baby h1{margin:0;font-family:var(--display);font-weight:700;font-size:1.45rem;letter-spacing:-.01em;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.baby .bt span{color:var(--muted);font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.baby .chev{flex:none;margin-left:6px;padding:7px 12px;border-radius:999px;background:var(--fg);color:var(--surface);font-weight:700;font-size:.85rem;white-space:nowrap}
 .datechip{color:var(--muted);font-size:.85rem;text-align:right}
 
 .banner{background:var(--warn-soft);color:var(--warn);border-radius:12px;padding:10px 14px;font-size:.88rem;margin-bottom:14px}
@@ -138,7 +143,6 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:12p
 .row.sub .main b{font-weight:500;font-size:.95rem}
 .sesshead+.row.sub{border-top:0!important}
 .row+.sesshead,.rowx+.sesshead{border-top:1px solid var(--line)}
-.baby h1::after{content:" ▾";font-size:.55em;color:var(--muted);vertical-align:middle}
 .plist{display:flex;flex-direction:column;gap:8px}
 .pitem{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 14px;border-radius:14px;background:var(--soft);border:2px solid transparent}
 .pitem.cur{border-color:var(--fg);background:var(--surface)}
@@ -193,7 +197,7 @@ nav.tabs button[aria-selected="true"]{color:var(--fg);background:var(--soft)}
 
 <div class="app">
   <header class="top">
-    <button class="baby" id="babyBtn" aria-label="Switch baby or family"><h1 id="babyName">Baby</h1><span id="babyAge">Tap to add name and birthday</span></button>
+    <button class="baby" id="babyBtn" aria-label="Switch baby or family"><span class="av" id="babyAv" aria-hidden="true">B</span><span class="bt"><h1 id="babyName">Baby</h1><span id="babyAge">Tap to add name and birthday</span></span><span class="chev">Switch ▾</span></button>
     <div class="datechip num" id="clock"></div>
   </header>
   <div id="banner" class="banner" hidden></div>
@@ -244,7 +248,7 @@ nav.tabs button[aria-selected="true"]{color:var(--fg);background:var(--soft)}
 (function(){
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-let babyId=null, feedTimer=null, db=null, histLimit=1500, moreAvailable=false, entries=[], sleepStart=null, baby={}, tab="today", filter="all", openRow=null, confirmRow=null;
+let family=null, families=[], babyId=null, feedTimer=null, db=null, histLimit=1500, moreAvailable=false, entries=[], sleepStart=null, baby={}, tab="today", filter="all", openRow=null, confirmRow=null;
 
 /* ---------- formatting ---------- */
 const MIN=60000, HR=3600000, DAY=86400000;
@@ -287,6 +291,8 @@ function renderToday(){
   if(baby.born){const days=Math.floor((dayStart(Date.now())-dayStart(baby.born))/DAY);
     $("babyAge").textContent=days<0?"Due soon":days<14?`${days} day${days===1?"":"s"} old`:days<84?`${Math.floor(days/7)} weeks old`:`${Math.floor(days/30.44)} months old`;}
   else $("babyAge").textContent="Tap to add name and birthday";
+  if(family)$("babyAge").textContent+=` · ${family.name}`;
+  $("babyAv").textContent=((baby.name||"Baby").replace(/^baby\s+/i,"").trim()[0]||"B").toUpperCase();
 
   const f=latest("feed");
   const fs=feedSessions(),ls=fs[fs.length-1];
@@ -680,7 +686,6 @@ setInterval(()=>{if(document.hidden)return;renderToday();refresh();},20000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden){render();refresh();}});
 
 /* ---------- families & babies ---------- */
-let family=null,families=[];
 function loadLocal(){
   try{families=JSON.parse(localStorage.getItem("nasiFamilies")||"[]");}catch(e){families=[];}
   if(!Array.isArray(families))families=[];
