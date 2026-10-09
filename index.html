@@ -65,7 +65,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:12p
 .actcard.feed{background:var(--feed-soft)} .actcard.poop{background:var(--poop-soft)}
 .actcard .act{background:transparent!important;flex:1}
 .qrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 16px 16px}
-.q{background:var(--surface);border:2px solid transparent;border-radius:12px;padding:12px 4px;font-weight:700;font-size:.95rem;color:var(--feed);transition:transform .12s ease}
+.q{background:var(--surface);border:2px solid transparent;border-radius:12px;padding:12px 4px;font-weight:700;font-size:.95rem;color:var(--poop);transition:transform .12s ease}
 .q:active{transform:scale(.96)}
 .q.next{border-color:var(--feed)}
 .q small{display:block;font-weight:500;font-size:.72rem;color:var(--muted);margin-top:1px}
@@ -168,9 +168,9 @@ nav.tabs button[aria-selected="true"]{color:var(--fg);background:var(--soft)}
 
   <main id="viewToday">
     <div class="actions">
-      <div class="actcard feed"><button class="act feed" id="actFeed"><div class="ic" aria-hidden="true">🍼</div><div class="tx"><b>Feed</b><span class="since" id="feedSince">No feeds yet</span><small id="feedLast">Tap to log</small></div></button>
-        <div class="qrow" role="group" aria-label="Log a feed with details"><button class="q" data-v="left">Left<small>breast</small></button><button class="q" data-v="right">Right<small>breast</small></button><button class="q" data-v="bottle">Bottle<small id="qBottle">60 mL</small></button></div></div>
-      <div class="actcard poop"><button class="act poop" id="actPoop"><div class="ic" aria-hidden="true">💩</div><div class="tx"><b>Poop</b><span class="since" id="poopSince">No changes yet</span><small id="poopLast">Tap to log</small></div></button></div>
+      <div class="actcard feed"><button class="act feed" id="actFeed"><div class="ic" aria-hidden="true">🍼</div><div class="tx"><b>Feed</b><span class="since" id="feedSince">No feeds yet</span><small id="feedLast">Tap to log</small></div></button></div>
+      <div class="actcard poop"><button class="act poop" id="actPoop"><div class="ic" aria-hidden="true">💩</div><div class="tx"><b>Poop</b><span class="since" id="poopSince">No changes yet</span><small id="poopLast">Tap to log</small></div></button>
+        <div class="qrow" role="group" aria-label="Log a diaper in one tap"><button class="q" data-v="wet">Wet</button><button class="q" data-v="dirty">Dirty</button><button class="q" data-v="both">Both</button></div></div>
       <button class="act sleep" id="actSleep"><div class="ic" aria-hidden="true">😴</div><div class="tx"><b id="sleepLabel">Sleep</b><span class="since" id="sleepSince">No sleeps yet</span><small id="sleepLast">Tap when baby falls asleep</small></div></button>
     </div>
     <div class="minor">
@@ -259,13 +259,10 @@ function renderToday(){
   $("feedSince").textContent=f?ago(f.at):"No feeds yet";
   const lb=entries.find(e=>e.type==="feed"&&e.method);
   const next=lb&&lb.method!=="bottle"?` · Next: ${lb.method==="left"?"Right":"Left"}`:"";
-  const lbt=entries.find(e=>e.type==="feed"&&e.method==="bottle");
-  $("qBottle").textContent=`${lbt?.amount||60} mL`;
-  document.querySelectorAll(".qrow .q").forEach(b=>b.classList.toggle("next",!!(lb&&lb.method!=="bottle"&&b.dataset.v===(lb.method==="left"?"right":"left"))));
-  $("feedLast").textContent=(f?(f.method?`${describe(f).title}${f.method==="bottle"||f.minutes?` · ${describe(f).detail}`:""} at ${hhmm(f.at)}`:`Logged at ${hhmm(f.at)}`):"One tap logs a feed")+next;
+  $("feedLast").textContent=(f?(f.method?`${describe(f).title}${f.method==="bottle"||f.minutes?` · ${describe(f).detail}`:""} at ${hhmm(f.at)}`:`Logged at ${hhmm(f.at)}`):"Tap to log a feed")+next;
   const p=latest("poop");
   $("poopSince").textContent=p?ago(p.at):"None logged yet";
-  $("poopLast").textContent=p?(p.kind?`${describe(p).title} at ${hhmm(p.at)}`:`Logged at ${hhmm(p.at)} · tap to log`):"Tap to log a diaper";
+  $("poopLast").textContent=p?(p.kind?`${describe(p).title} at ${hhmm(p.at)}`:`Logged at ${hhmm(p.at)} · tap to log`):"One tap logs a diaper";
 
   const sb=$("actSleep");
   if(sleepStart){sb.classList.add("on");$("sleepLabel").textContent="Asleep";
@@ -538,11 +535,9 @@ function babySheet(){
 }
 
 /* ---------- events ---------- */
-$("actFeed").onclick=()=>quickLog("feed");
-document.querySelector(".qrow").addEventListener("click",e=>{const b=e.target.closest(".q");if(!b)return;const v=b.dataset.v;
-  if(v==="bottle"){const lbt=entries.find(x=>x.type==="feed"&&x.method==="bottle");quickLog("feed",{method:"bottle",amount:lbt?.amount||60,milk:lbt?.milk||"breast"});}
-  else quickLog("feed",{method:v});});
-$("actPoop").onclick=()=>poopSheet(null);
+$("actFeed").onclick=()=>feedSheet(null);
+$("actPoop").onclick=()=>quickLog("poop");
+document.querySelector(".qrow").addEventListener("click",e=>{const b=e.target.closest(".q");if(b)quickLog("poop",{kind:b.dataset.v});});
 $("actWeight").onclick=()=>weightSheet(null);
 $("actTemp").onclick=()=>tempSheet(null);
 $("addPastSleep").onclick=()=>sleepSheet(null);
