@@ -61,6 +61,14 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:12p
 .act.sleep.on .ic{background:var(--surface);color:var(--sleep)}
 .act.sleep.on small,.act.sleep.on .since{color:var(--surface);opacity:.92}
 
+.actcard{display:flex;flex-direction:column;border-radius:22px}
+.actcard.feed{background:var(--feed-soft)} .actcard.poop{background:var(--poop-soft)}
+.actcard .act{background:transparent!important;flex:1}
+.qrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 16px 16px}
+.q{background:var(--surface);border:2px solid transparent;border-radius:12px;padding:12px 4px;font-weight:700;font-size:.95rem;color:var(--feed);transition:transform .12s ease}
+.q:active{transform:scale(.96)}
+.q.next{border-color:var(--feed)}
+.q small{display:block;font-weight:500;font-size:.72rem;color:var(--muted);margin-top:1px}
 .minor{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
 .mini{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px;text-align:left}
 .mini span{color:var(--muted);font-size:.85rem;display:block}
@@ -160,8 +168,9 @@ nav.tabs button[aria-selected="true"]{color:var(--fg);background:var(--soft)}
 
   <main id="viewToday">
     <div class="actions">
-      <button class="act feed" id="actFeed"><div class="ic" aria-hidden="true">🍼</div><div class="tx"><b>Feed</b><span class="since" id="feedSince">No feeds yet</span><small id="feedLast">Tap to log</small></div></button>
-      <button class="act poop" id="actPoop"><div class="ic" aria-hidden="true">💩</div><div class="tx"><b>Poop</b><span class="since" id="poopSince">No changes yet</span><small id="poopLast">Tap to log</small></div></button>
+      <div class="actcard feed"><button class="act feed" id="actFeed"><div class="ic" aria-hidden="true">🍼</div><div class="tx"><b>Feed</b><span class="since" id="feedSince">No feeds yet</span><small id="feedLast">Tap to log</small></div></button>
+        <div class="qrow" role="group" aria-label="Log a feed with details"><button class="q" data-v="left">Left<small>breast</small></button><button class="q" data-v="right">Right<small>breast</small></button><button class="q" data-v="bottle">Bottle<small id="qBottle">60 mL</small></button></div></div>
+      <div class="actcard poop"><button class="act poop" id="actPoop"><div class="ic" aria-hidden="true">💩</div><div class="tx"><b>Poop</b><span class="since" id="poopSince">No changes yet</span><small id="poopLast">Tap to log</small></div></button></div>
       <button class="act sleep" id="actSleep"><div class="ic" aria-hidden="true">😴</div><div class="tx"><b id="sleepLabel">Sleep</b><span class="since" id="sleepSince">No sleeps yet</span><small id="sleepLast">Tap when baby falls asleep</small></div></button>
     </div>
     <div class="minor">
@@ -250,10 +259,13 @@ function renderToday(){
   $("feedSince").textContent=f?ago(f.at):"No feeds yet";
   const lb=entries.find(e=>e.type==="feed"&&e.method);
   const next=lb&&lb.method!=="bottle"?` · Next: ${lb.method==="left"?"Right":"Left"}`:"";
-  $("feedLast").textContent=(f?(f.method?`${describe(f).title} · ${describe(f).detail} at ${hhmm(f.at)}`:`Logged at ${hhmm(f.at)}`):"One tap logs a feed")+next;
+  const lbt=entries.find(e=>e.type==="feed"&&e.method==="bottle");
+  $("qBottle").textContent=`${lbt?.amount||60} mL`;
+  document.querySelectorAll(".qrow .q").forEach(b=>b.classList.toggle("next",!!(lb&&lb.method!=="bottle"&&b.dataset.v===(lb.method==="left"?"right":"left"))));
+  $("feedLast").textContent=(f?(f.method?`${describe(f).title}${f.method==="bottle"||f.minutes?` · ${describe(f).detail}`:""} at ${hhmm(f.at)}`:`Logged at ${hhmm(f.at)}`):"One tap logs a feed")+next;
   const p=latest("poop");
   $("poopSince").textContent=p?ago(p.at):"None logged yet";
-  $("poopLast").textContent=p?(p.kind?`${describe(p).title} at ${hhmm(p.at)}`:`Logged at ${hhmm(p.at)} · tap to log`):"One tap logs a diaper";
+  $("poopLast").textContent=p?(p.kind?`${describe(p).title} at ${hhmm(p.at)}`:`Logged at ${hhmm(p.at)} · tap to log`):"Tap to log a diaper";
 
   const sb=$("actSleep");
   if(sleepStart){sb.classList.add("on");$("sleepLabel").textContent="Asleep";
@@ -400,11 +412,12 @@ async function setEntry(id,obj){
   refresh();
 }
 const byId=id=>entries.find(e=>e.id===id);
-function quickLog(type){
-  const at=Date.now();const id=addEntry({type,at});
-  const find=()=>byId(id)||entries.find(x=>x.at===at&&x.type===type)||{id,type,at};
+function quickLog(type,extra){
+  const at=Date.now();const obj={type,at,...(extra||{})};const id=addEntry(obj);
+  const find=()=>byId(id)||entries.find(x=>x.at===at&&x.type===type)||{id,...obj};
   const open=()=>{const e=find();type==="feed"?feedSheet(e):poopSheet(e);};
-  toast(type==="feed"?`Feed logged at ${hhmm(at)}`:`Poop logged at ${hhmm(at)}`,[["Undo",()=>{delEntry(find().id);toast("Removed");}],["Add details",open]]);
+  const d=describe(obj),what=extra?(type==="feed"&&obj.method==="bottle"?`Bottle ${obj.amount} mL`:d.title):(type==="feed"?"Feed":"Poop");
+  toast(`${what} logged at ${hhmm(at)}`,[["Undo",()=>{delEntry(find().id);toast("Removed");}],[extra?"Edit":"Add details",open]]);
 }
 async function delEntry(id){
   entries=entries.filter(e=>e.id!==id);render();
@@ -426,6 +439,7 @@ const timeField=`<div class="field"><label for="fTime">Time</label><input type="
 const btns=(color,label)=>`<div class="sheetbtns"><button class="btn" data-close>Cancel</button><button class="primary" id="fSave" style="background:${color}">${label}</button></div>`;
 
 function feedSheet(cur){
+  const isNew=!cur;cur=cur||{at:Date.now()};
   const last=entries.find(e=>e.type==="feed"&&e.method&&e.id!==cur.id);
   let method=cur.method||(last&&last.method==="left"?"right":last&&last.method==="right"?"left":(last?.method||"left"));
   let amount=cur.amount||last?.amount||60, minutes=cur.minutes||last?.minutes||15, milk=cur.milk||last?.milk||"breast";
@@ -433,7 +447,7 @@ function feedSheet(cur){
     <div id="breastBox"><div class="field"><label>Duration</label><div class="stepper"><button type="button" data-d="-5">−</button><output class="num" id="minOut"></output><button type="button" data-d="5">+</button></div></div></div>
     <div id="bottleBox"><div class="field"><label>Amount</label><div class="stepper"><button type="button" data-a="-10">−</button><output class="num" id="amtOut"></output><button type="button" data-a="10">+</button></div></div>
     <div style="margin-top:12px">${seg("k",[["breast","Breast milk"],["formula","Formula"]],milk)}</div></div>
-    ${timeField}${btns("var(--feed)","Save details")}`, root=>{
+    ${timeField}${btns("var(--feed)",isNew?"Save feed":"Save changes")}`, root=>{
       $("fTime").value=localInput(cur.at);
       const upd=()=>{$("minOut").textContent=`${minutes} min`;$("amtOut").textContent=`${amount} mL`;
         $("breastBox").hidden=method==="bottle";$("bottleBox").hidden=method!=="bottle";};
@@ -443,16 +457,20 @@ function feedSheet(cur){
         if(d){minutes=Math.max(0,Math.min(90,minutes+ +d.dataset.d));upd();}
         if(a){amount=Math.max(0,Math.min(300,amount+ +a.dataset.a));upd();}});
       $("fSave").onclick=()=>{const at=fromInput($("fTime").value);
-        setEntry(cur.id,method==="bottle"?{type:"feed",method,amount,milk,at}:{type:"feed",method,minutes,at});closeSheet();toast("Feed details saved");};
+        const obj=method==="bottle"?{type:"feed",method,amount,milk,at}:{type:"feed",method,minutes,at};
+        if(isNew)addEntry(obj);else setEntry(cur.id,obj);closeSheet();toast(isNew?`${describe(obj).title} logged at ${hhmm(at)}`:"Feed updated");};
     });
 }
 function poopSheet(cur){
-  let kind=cur.kind||"dirty";
-  openSheet(`<h3>Poop details</h3>${seg("p",[["wet","Wet"],["dirty","Dirty"],["both","Both"]],kind)}
-    ${timeField}${btns("var(--poop)","Save details")}`, root=>{
+  const isNew=!cur;cur=cur||{at:Date.now()};
+  let kind=cur.kind||null;
+  openSheet(`<h3>Poop</h3>${seg("p",[["wet","Wet"],["dirty","Dirty"],["both","Both"]],kind)}
+    ${timeField}${btns("var(--poop)",isNew?"Save poop":"Save changes")}`, root=>{
       $("fTime").value=localInput(cur.at);
       bindSeg(root,"p",v=>{kind=v;});
-      $("fSave").onclick=()=>{setEntry(cur.id,{type:"poop",kind,at:fromInput($("fTime").value)});closeSheet();toast("Poop details saved");};
+      $("fSave").onclick=()=>{if(!kind){toast("Pick Wet, Dirty or Both");return;}
+        const obj={type:"poop",kind,at:fromInput($("fTime").value)};
+        if(isNew)addEntry(obj);else setEntry(cur.id,obj);closeSheet();toast(isNew?`${describe(obj).title} logged at ${hhmm(obj.at)}`:"Poop updated");};
     });
 }
 function generalNoteSheet(cur){
@@ -521,7 +539,10 @@ function babySheet(){
 
 /* ---------- events ---------- */
 $("actFeed").onclick=()=>quickLog("feed");
-$("actPoop").onclick=()=>quickLog("poop");
+document.querySelector(".qrow").addEventListener("click",e=>{const b=e.target.closest(".q");if(!b)return;const v=b.dataset.v;
+  if(v==="bottle"){const lbt=entries.find(x=>x.type==="feed"&&x.method==="bottle");quickLog("feed",{method:"bottle",amount:lbt?.amount||60,milk:lbt?.milk||"breast"});}
+  else quickLog("feed",{method:v});});
+$("actPoop").onclick=()=>poopSheet(null);
 $("actWeight").onclick=()=>weightSheet(null);
 $("actTemp").onclick=()=>tempSheet(null);
 $("addPastSleep").onclick=()=>sleepSheet(null);
