@@ -820,8 +820,11 @@ render();
   loadLocal();
   const fromHash=(location.hash.match(/c=([\w-]+)/)||[])[1];
   if(fromHash&&!families.some(f=>f.code===fromHash)){if(await openFamily(fromHash,null))return;}
+  const wantsNew=/^#new$/i.test(location.hash);
+  if(wantsNew){try{history.replaceState(null,"",location.pathname);}catch(e){}}
   if(code){if(!(await openFamily(code,babyId))&&!families.length)welcomeSheet();}
-  else welcomeSheet();
+  else if(!wantsNew)welcomeSheet();
+  if(wantsNew)newFamilySheet(!families.length);
 })();
 })();
 </script>
