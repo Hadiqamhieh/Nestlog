@@ -156,6 +156,21 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:12p
 .btnrow{display:flex;flex-wrap:wrap;gap:8px}
 .linkish{color:var(--feed);font-weight:600;padding:8px 0;text-align:left}
 .linkish.warn{color:var(--warn)}
+[hidden]{display:none!important}
+body.homing .app,body.homing nav.tabs{display:none}
+.home{max-width:560px;margin:0 auto;padding-inline:20px;padding-block:44px 48px;display:flex;flex-direction:column;gap:24px}
+.home .hlogo{width:88px;height:88px;border-radius:24px;box-shadow:0 6px 18px rgba(21,30,43,.12)}
+.home h2{margin:0 0 6px;font-family:var(--display);font-size:2.2rem;line-height:1.1;letter-spacing:-.01em;text-wrap:balance}
+.home .lead{margin:0;color:var(--muted);font-size:1.05rem;line-height:1.45;max-width:42ch}
+.famcard{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:14px 16px;border-radius:18px;background:var(--surface);border:1.5px solid var(--line);transition:transform .12s ease}
+.famcard:active{transform:scale(.98)}
+.famcard .fav{flex:none;width:48px;height:48px;border-radius:50%;background:var(--feed);color:var(--surface);display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:1.3rem}
+.famcard .main{flex:1;min-width:0}
+.famcard b{display:block;font-family:var(--display);font-size:1.2rem}
+.famcard .main span{display:block;color:var(--muted);font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.famcard .go{flex:none;padding:7px 12px;border-radius:999px;background:var(--fg);color:var(--surface);font-weight:700;font-size:.85rem}
+.hactions{display:flex;flex-direction:column;gap:10px}
+.hactions .primary,.hactions .btn{padding:16px;font-size:1.05rem;border-radius:16px;font-weight:700}
 .rowx{display:flex;justify-content:flex-end;gap:8px;padding:0 16px 12px}
 .btn{padding:9px 16px;border-radius:12px;font-weight:600;font-size:.92rem;background:var(--soft)}
 .btn.danger{background:var(--warn);color:var(--surface)}
@@ -195,6 +210,7 @@ nav.tabs button[aria-selected="true"]{color:var(--fg);background:var(--soft)}
 <body>
 
 
+<main class="home" id="home" hidden></main>
 <div class="app">
   <header class="top">
     <button class="baby" id="babyBtn" aria-label="Switch baby or family"><span class="av" id="babyAv" aria-hidden="true">B</span><span class="bt"><h1 id="babyName">Baby</h1><span id="babyAge">Tap to add name and birthday</span></span><span class="chev">Switch ▾</span></button>
@@ -698,7 +714,7 @@ function resetView(){entries=[];sleepStart=null;feedTimer=null;baby={};openRow=c
 async function openFamily(c,bid){
   const prev={code,babyId};code=c;
   try{family=await rpc("nest_family_info");}
-  catch(e){code=prev.code;babyId=prev.babyId;if(e.badCode){families=families.filter(f=>f.code!==c);saveLocal();toast("That family code didn't work");if(!families.length)welcomeSheet();}else toast("Couldn't reach NasiLog. Check your connection.");return false;}
+  catch(e){code=prev.code;babyId=prev.babyId;if(e.badCode){families=families.filter(f=>f.code!==c);saveLocal();toast("That family code didn't work");if(!families.length)showHome();}else toast("Couldn't reach NasiLog. Check your connection.");return false;}
   const f=families.find(x=>x.code===c);if(f)f.name=family.name;else families.push({code:c,name:family.name});
   const ids=family.babies.map(b=>b.id);
   babyId=ids.includes(bid)?bid:(ids.includes(family.watchBaby)?family.watchBaby:ids[0]||null);
@@ -710,7 +726,7 @@ function inviteLink(){return location.origin+location.pathname+"#c="+code;}
 async function copyText(t,label){try{await navigator.clipboard.writeText(t);toast(`${label} copied`);}catch(e){toast("Select the text and copy it");}}
 
 function profileSheet(){
-  if(!family){welcomeSheet();return;}
+  if(!family){showHome();return;}
   const others=families.filter(f=>f.code!==code);
   const babies=family.babies.map(b=>`<button class="pitem${b.id===babyId?" cur":""}" data-baby="${esc(b.id)}"><span class="main"><b>${esc(b.name)}</b><span>${esc(ageText(b.born))}</span></span>${b.id===family.watchBaby?'<span class="tag">⌚ Watch</span>':""}</button>`).join("");
   const cur=family.babies.find(b=>b.id===babyId);
@@ -723,6 +739,7 @@ function profileSheet(){
       <div class="btnrow"><button class="btn" id="pCopy">Copy code</button><button class="btn" id="pLink">Copy invite link</button><button class="btn" id="pRename">Rename family</button></div></div>
     <div class="psec"><h4>Other families</h4>
       ${others.length?`<div class="plist">${others.map(f=>`<button class="pitem" data-fam="${esc(f.code)}"><span class="main"><b>${esc(f.name)}</b><span>Tap to switch</span></span></button>`).join("")}</div>`:""}
+      <button class="linkish" id="pHome">🏠 Home page (all families)</button>
       <button class="linkish" id="pJoin">+ Join a family with a code</button>
       <button class="linkish" id="pNew">+ Start a new family</button>
       <button class="linkish warn" id="pOut">Sign out of ${esc(family.name)} on this device</button></div>
@@ -735,6 +752,7 @@ function profileSheet(){
       $("pCopy").onclick=()=>copyText(code,"Family code");
       $("pLink").onclick=()=>copyText(inviteLink(),"Invite link");
       $("pRename").onclick=()=>renameFamily();
+      $("pHome").onclick=()=>showHome();
       $("pJoin").onclick=()=>joinSheet(false);
       $("pNew").onclick=()=>newFamilySheet(false);
       $("pOut").onclick=()=>signOutSheet();
@@ -766,9 +784,9 @@ function joinSheet(locked){
     <p class="note">Enter the family code someone shared with you. You'll see the same babies and log they do.</p>
     <div class="field"><label for="fCode">Family code</label><input id="fCode" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="nasi-…"></div>
     <div class="sheetbtns">${locked?`<button class="btn" id="jBack">Back</button>`:`<button class="btn" data-close>Cancel</button>`}<button class="primary" id="fSave" style="background:var(--fg)">Join</button></div>`,()=>{
-      if($("jBack"))$("jBack").onclick=welcomeSheet;
+      if($("jBack"))$("jBack").onclick=showHome;
       $("fSave").onclick=async()=>{const v=$("fCode").value.trim();if(!v)return;closeSheet();
-        if(!(await openFamily(v,null))){joinSheet(locked);return;}toast(`Joined ${family.name}`);};
+        if(!(await openFamily(v,null))){joinSheet(locked);return;}hideHome();toast(`Joined ${family.name}`);};
     },locked);
 }
 function newFamilySheet(locked){
@@ -778,11 +796,11 @@ function newFamilySheet(locked){
     <div class="field"><label for="fName">Baby's name</label><input id="fName" maxlength="40" placeholder="Baby's name"></div>
     <div class="field"><label for="fBorn">Birthday (optional)</label><input id="fBorn" type="date"></div>
     <div class="sheetbtns">${locked?`<button class="btn" id="jBack">Back</button>`:`<button class="btn" data-close>Cancel</button>`}<button class="primary" id="fSave" style="background:var(--fg)">Create family</button></div>`,()=>{
-      if($("jBack"))$("jBack").onclick=welcomeSheet;
+      if($("jBack"))$("jBack").onclick=showHome;
       $("fSave").onclick=async()=>{const fam=$("fFam").value.trim(),name=$("fName").value.trim(),bv=$("fBorn").value;if(!name){toast("Enter the baby's name");return;}
         const born=bv?new Date(bv+"T12:00").getTime():null;$("fSave").disabled=true;
         try{const r=await rpc("nest_family_create",{p_family:fam||"My family",p_baby:name,p_born:born});
-          closeSheet();if(await openFamily(r.code,r.baby))codeReadySheet();}
+          closeSheet();if(await openFamily(r.code,r.baby)){hideHome();codeReadySheet();}}
         catch(e){$("fSave").disabled=false;toast("Couldn't create the family. Check your connection.");}};
     },locked);
 }
@@ -801,17 +819,31 @@ function signOutSheet(){
     <div class="codebox">${esc(code)}</div>
     <div class="sheetbtns"><button class="btn" data-close>Cancel</button><button class="primary" id="oYes" style="background:var(--warn)">Sign out</button></div>`,()=>{
       $("oYes").onclick=async()=>{const gone=code;families=families.filter(f=>f.code!==gone);code="";babyId=null;family=null;saveLocal();resetView();closeSheet();
-        if(families.length){await openFamily(families[0].code,null);toast(`Switched to ${family.name}`);}else welcomeSheet();};
+        if(families.length){await openFamily(families[0].code,null);toast(`Switched to ${family.name}`);}else showHome();};
     });
 }
-function welcomeSheet(){
-  openSheet(`<h3>Welcome to NasiLog</h3>
-    <p class="note">Track feeds, diapers and sleep, shared with everyone who cares for your baby.</p>
-    <div class="sheetbtns" style="grid-template-columns:1fr">
-      <button class="primary" id="wJoin" style="background:var(--fg)">I have a family code</button>
-      <button class="btn" id="wNew">Start a new family</button></div>`,()=>{
-      $("wJoin").onclick=()=>joinSheet(true);$("wNew").onclick=()=>newFamilySheet(true);
-    },true);
+function showHome(){closeSheet();document.body.classList.add("homing");$("home").hidden=false;renderHome();window.scrollTo(0,0);}
+function hideHome(){document.body.classList.remove("homing");$("home").hidden=true;}
+function renderHome(){
+  const logo=(document.querySelector('link[rel="apple-touch-icon"]')||{}).href||"";
+  const has=families.length>0;
+  const cards=families.map(f=>`<button class="famcard" data-home="${esc(f.code)}"><span class="fav" aria-hidden="true">${esc(((f.name||"F").replace(/^the\s+/i,"").trim()[0]||"F").toUpperCase())}</span><span class="main"><b>${esc(f.name||"Family")}</b><span data-babies="${esc(f.code)}">${esc(f.babies||"Tap to open")}</span></span><span class="go">Open ›</span></button>`).join("");
+  $("home").innerHTML=`${logo?`<img class="hlogo" src="${logo}" alt="NasiLog">`:""}
+    <div><h2>${has?"Welcome back":"Welcome to NasiLog"}</h2>
+      <p class="lead">${has?"Open your family's log, or start a new family profile.":"Track feeds, diapers and sleep in one place, shared with everyone who cares for your baby. Start by creating your family profile."}</p></div>
+    ${has?`<div class="psec"><h4>Your families</h4><div class="plist">${cards}</div></div>`:""}
+    <div class="hactions"><button class="primary" id="hNew" style="background:var(--fg)">+ Start a new family</button><button class="btn" id="hJoin">I have a family code</button></div>`;
+  $("home").querySelectorAll("[data-home]").forEach(b=>b.onclick=async()=>{const c=b.dataset.home;
+    if(await openFamily(c,c===code?babyId:null))hideHome();else renderHome();});
+  $("hNew").onclick=()=>newFamilySheet(false);
+  $("hJoin").onclick=()=>joinSheet(false);
+  // fill in each family's babies
+  families.forEach(async f=>{try{
+    const r=await fetch(API+"nest_family_info",{method:"POST",headers:{apikey:KEY,"Content-Type":"application/json"},body:JSON.stringify({p_code:f.code})});
+    if(!r.ok)return;const info=await r.json();f.name=info.name;f.babies=info.babies.map(b=>b.name).join(" · ")||"No babies yet";saveLocal();
+    const el=$("home").querySelector(`[data-babies="${CSS.escape(f.code)}"]`);if(el)el.textContent=f.babies;
+    const card=el&&el.closest(".famcard");if(card)card.querySelector("b").textContent=f.name;
+  }catch(e){}});
 }
 
 /* ---------- boot ---------- */
@@ -820,20 +852,19 @@ render();
   loadLocal();
   const fromHash=(location.hash.match(/c=([\w-]+)/)||[])[1];
   if(fromHash&&!families.some(f=>f.code===fromHash)){if(await openFamily(fromHash,null))return;}
-  const wantsNew=/^#new$/i.test(location.hash);
-  if(wantsNew){try{history.replaceState(null,"",location.pathname);}catch(e){}}
-  if(code){if(!(await openFamily(code,babyId))&&!families.length)welcomeSheet();}
-  else if(!wantsNew)welcomeSheet();
-  if(wantsNew)newFamilySheet(!families.length);
+  // the home-page link (#home, or the older #new) always lands on the home page, and keeps the # so a Home Screen icon saved from it does too
+  if(/^#(home|new)$/i.test(location.hash)){showHome();return;}
+  if(code){if(!(await openFamily(code,babyId))&&!families.length)showHome();}
+  else showHome();
 })();
 // links pasted into a tab where NasiLog is already open only change the #part, so react to that too
 window.addEventListener("hashchange",async()=>{
   const h=location.hash;
-  if(/^#new$/i.test(h)){try{history.replaceState(null,"",location.pathname);}catch(e){}newFamilySheet(!families.length);return;}
+  if(/^#(home|new)$/i.test(h)){showHome();return;}
   const c=(h.match(/c=([\w-]+)/)||[])[1];
   if(c){try{history.replaceState(null,"",location.pathname);}catch(e){}
     if(c===code){toast(`Already viewing ${family?family.name:"this family"}`);return;}
-    if(await openFamily(c,null))toast(`Switched to ${family.name}`);}
+    if(await openFamily(c,null)){hideHome();toast(`Switched to ${family.name}`);}}
 });
 })();
 </script>
