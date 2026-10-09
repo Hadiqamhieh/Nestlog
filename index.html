@@ -826,6 +826,15 @@ render();
   else if(!wantsNew)welcomeSheet();
   if(wantsNew)newFamilySheet(!families.length);
 })();
+// links pasted into a tab where NasiLog is already open only change the #part, so react to that too
+window.addEventListener("hashchange",async()=>{
+  const h=location.hash;
+  if(/^#new$/i.test(h)){try{history.replaceState(null,"",location.pathname);}catch(e){}newFamilySheet(!families.length);return;}
+  const c=(h.match(/c=([\w-]+)/)||[])[1];
+  if(c){try{history.replaceState(null,"",location.pathname);}catch(e){}
+    if(c===code){toast(`Already viewing ${family?family.name:"this family"}`);return;}
+    if(await openFamily(c,null))toast(`Switched to ${family.name}`);}
+});
 })();
 </script>
 
