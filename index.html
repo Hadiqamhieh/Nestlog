@@ -792,6 +792,12 @@ const REGIONS={
     mh:`Call HealthLink BC at 811 or 310-6789 (no area code), talk with your provider, or call or text 988 any time. Call 911 if you're in danger.`,
     vax:`<p>In BC, free routine vaccines are given at 2 months, including protection against diphtheria, tetanus, whooping cough, hepatitis B, polio, Hib, meningococcal C, pneumococcal disease and rotavirus. Book with your health unit or family doctor.</p><p><a href="https://www.healthlinkbc.ca/healthlinkbc-files/immunizations-2-months-age">HealthLink BC: Immunizations at 2 months ›</a></p>`,
     src:[["HealthLink BC 8-1-1","https://central-okanagan.pathwaysbc.ca/programs/298"],["310 Mental Health Support","https://bc.211.ca/result/310mental-health-support-9492003"],["988 Suicide Crisis Helpline","https://988.ca"]]},
+  ab:{name:"Alberta",emerg:"911",emergWho:"911",
+    lines:[["911","Emergencies"],["811","Health Link: health advice from a registered nurse, 24/7 (interpreter: press 1)"],["988","Call or text in a mental health crisis, 24/7"],["1-877-303-2642","Alberta Mental Health Helpline"]],
+    nurse:`call Health Link at 811 to talk to a registered nurse, 24/7`,
+    mh:`Call the Mental Health Helpline at 1-877-303-2642 or Health Link at 811, talk with your provider, or call or text 988 any time. Call 911 if you're in danger.`,
+    vax:`<p>In Alberta, free routine vaccines start at 2 months: a combined vaccine (diphtheria, tetanus, whooping cough, polio, Hib and hepatitis B), pneumococcal and rotavirus. Your baby's first well-child clinic visit is at 2 months.</p><p><a href="https://myhealth.alberta.ca/Topic/Immunization/Pages/Recommended-Vaccines.aspx">Alberta: Recommended vaccines ›</a> · <a href="https://myhealth.alberta.ca/topic/immunization/pages/book-appointment.aspx">Book an appointment ›</a></p>`,
+    src:[["Alberta Health Services: Guide to the Early Days",""],["MyHealth Alberta: Immunization","https://myhealth.alberta.ca/Topic/Immunization/Pages/default.aspx"],["988 Suicide Crisis Helpline","https://988.ca"]]},
   dxb:{name:"Dubai, UAE",emerg:"998",emergWho:"998 (ambulance)",
     lines:[["998","Ambulance"],["999","Police"],["800 342","Dubai Health Authority, 24/7. Free doctor consultations for Dubai residents"],["800 506","Itma'en mental health support, daily 9 am to midnight, free"]],
     nurse:`call the Dubai Health Authority at 800 342 (24/7)`,
@@ -804,6 +810,7 @@ function detectRegion(){
   let tz="";try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||"";}catch(e){}
   if(/^Asia\/(Dubai|Muscat)$/.test(tz))return "dxb";
   if(/^America\/(Vancouver|Dawson_Creek|Fort_Nelson|Creston)$/.test(tz))return "bc";
+  if(/^America\/(Edmonton|Yellowknife)$/.test(tz))return "ab";
   return "on";
 }
 let region=detectRegion();
@@ -847,7 +854,7 @@ function buildGuide(){
     <li><b>Call ${R.emergWho}</b> if your baby has trouble breathing, turns blue, has a seizure, or won't wake up.</li>
     <li><b>Fever in a baby under 3 months</b> (armpit above 37.5 °C or rectal above 37.9 °C): your baby needs to be seen by a doctor urgently.</li></ul></section>
     <div class="glines">${R.lines.map(([n,t])=>`<div class="gline"><b>${n}</b><span>${t}</span></div>`).join("")}</div>
-    <p class="gsrc" style="margin:-10px 0 18px">Numbers for ${R.name} from: ${R.src.map(([t,u])=>`<a href="${u}">${t}</a>`).join(" · ")}</p>`;
+    <p class="gsrc" style="margin:-10px 0 18px">Numbers for ${R.name} from: ${R.src.map(([t,u])=>u?`<a href="${u}">${t}</a>`:t).join(" · ")}</p>`;
   const fill=x=>x.replaceAll("{{NURSE}}",R.nurse).replaceAll("{{EMERG}}",R.emerg).replaceAll("{{MH}}",R.mh).replaceAll("{{VAX}}",R.vax);
   GUIDE.forEach((sec,si)=>{h+=`<section class="gsec" data-sec="${si}"><h2>${sec.sec}</h2>`;
     sec.cards.forEach((c,ci)=>{const b=fill(c.b);h+=`<details class="gcard" data-txt="${esc((c.t+" "+b.replace(/<[^>]+>/g," ")).toLowerCase())}"${c.live?` data-live="${c.live}"`:""}><summary>${c.t}</summary><div class="gb">${b}</div></details>`;});
