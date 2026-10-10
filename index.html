@@ -171,6 +171,52 @@ body.homing .app,body.homing nav.tabs{display:none}
 .famcard .go{flex:none;padding:7px 12px;border-radius:999px;background:var(--fg);color:var(--surface);font-weight:700;font-size:.85rem}
 .hactions{display:flex;flex-direction:column;gap:10px}
 .hactions .primary,.hactions .btn{padding:16px;font-size:1.05rem;border-radius:16px;font-weight:700}
+/* guide */
+.gsearch{width:100%;font:inherit;font-size:1rem;padding:12px 14px;border-radius:14px;border:1.5px solid var(--line);background:var(--soft);color:var(--fg);margin-bottom:14px}
+.rtbtn{display:block;width:calc(100% - 32px);margin:0 16px 16px;padding:13px;border-radius:14px;background:var(--feed);color:var(--surface);font-weight:700;font-size:1rem}
+.rtsteps{display:flex;flex-direction:column;gap:0;counter-reset:rt}
+.rtstep{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line)}
+.rtstep:last-child{border-bottom:0}
+.rtnum{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:.9rem;background:var(--soft);color:var(--muted);border:2px solid var(--line)}
+.rtstep.now .rtnum{background:var(--feed);color:var(--surface);border-color:var(--feed)}
+.rtstep.done .rtnum{background:var(--fg);color:var(--surface);border-color:var(--fg)}
+.rtbody{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.rtbody b{font-size:1rem}
+.rtbody small{color:var(--muted);font-size:.85rem;line-height:1.35}
+.rtstep.done .rtbody b{text-decoration:line-through;color:var(--muted)}
+.rtacts{display:flex;flex-wrap:wrap;gap:6px}
+.rtacts button{padding:8px 12px;border-radius:10px;font-weight:700;font-size:.88rem;background:var(--soft)}
+.rtacts button.go{background:var(--feed);color:var(--surface)}
+.rtacts button.stop{background:var(--fg);color:var(--surface)}
+.rtdue{background:var(--feed-soft);border-radius:12px;padding:10px 12px;font-size:.9rem}
+.gregion{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.gregion span{font-size:.85rem;color:var(--muted);font-weight:600}
+.gregion .chips{margin:0;padding:0;flex-wrap:wrap;overflow:visible}
+.ghelp{border-radius:18px;background:var(--warn-soft);padding:16px;margin-bottom:12px;display:flex;flex-direction:column;gap:10px}
+.ghelp h3{margin:0;font-family:var(--display);font-size:1.15rem;color:var(--warn)}
+.ghelp ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px;font-size:.95rem}
+.glines{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:18px}
+.gline{background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;min-width:0}
+.gline b{display:block;font-family:var(--display);font-size:1.25rem}
+.gline span{color:var(--muted);font-size:.82rem;line-height:1.3;display:block}
+.gsec{margin-bottom:20px}
+.gsec>h2{margin:0 0 8px;font-family:var(--display);font-size:1.25rem}
+.gcard{background:var(--surface);border:1px solid var(--line);border-radius:16px;margin-bottom:8px;overflow:hidden}
+.gcard summary{list-style:none;cursor:pointer;padding:14px 16px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.gcard summary::-webkit-details-marker{display:none}
+.gcard summary::after{content:"+";font-size:1.3rem;color:var(--muted);font-weight:500}
+.gcard[open] summary::after{content:"−"}
+.gcard .gb{padding:0 16px 14px;font-size:.95rem;line-height:1.5;display:flex;flex-direction:column;gap:8px}
+.gcard .gb p{margin:0}
+.gcard .gb ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:3px}
+.gcard table{border-collapse:collapse;width:100%;font-size:.88rem}
+.gcard th,.gcard td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.gcard th{color:var(--muted);font-weight:600}
+.gtw{overflow-x:auto}
+.gyou{background:var(--soft);border-radius:12px;padding:10px 12px;font-size:.9rem}
+.gsrc{font-size:.82rem;color:var(--muted)}
+.gsrc a,.gb a{color:var(--feed)}
+.gfoot{font-size:.82rem;color:var(--muted);line-height:1.45;margin-top:8px}
 .rowx{display:flex;justify-content:flex-end;gap:8px;padding:0 16px 12px}
 .btn{padding:9px 16px;border-radius:12px;font-weight:600;font-size:.92rem;background:var(--soft)}
 .btn.danger{background:var(--warn);color:var(--surface)}
@@ -221,7 +267,8 @@ nav.tabs button[aria-selected="true"]{color:var(--fg);background:var(--soft)}
   <main id="viewToday">
     <div class="actions">
       <div class="actcard feed"><button class="act feed" id="actFeed"><div class="ic" aria-hidden="true">🍼</div><div class="tx"><b>Feed</b><span class="since" id="feedSince">No feeds yet</span><small id="feedLast">Tap to log</small></div></button>
-        <div class="qrow" id="feedQ" role="group" aria-label="Feed"></div></div>
+        <div class="qrow" id="feedQ" role="group" aria-label="Feed"></div>
+        <button class="rtbtn" id="rtOpen">▶ Feeding routine (step by step)</button></div>
       <div class="actcard poop"><button class="act poop" id="actPoop"><div class="ic" aria-hidden="true">💩</div><div class="tx"><b>Poop</b><span class="since" id="poopSince">No changes yet</span><small id="poopLast">Tap to log</small></div></button>
         <div class="qrow" id="poopQ" role="group" aria-label="Log a diaper in one tap"><button class="q" data-v="wet">Wet</button><button class="q" data-v="dirty">Dirty</button><button class="q" data-v="both">Both</button></div></div>
       <button class="act sleep" id="actSleep"><div class="ic" aria-hidden="true">😴</div><div class="tx"><b id="sleepLabel">Sleep</b><span class="since" id="sleepSince">No sleeps yet</span><small id="sleepLast">Tap when baby falls asleep</small></div></button>
@@ -247,6 +294,11 @@ nav.tabs button[aria-selected="true"]{color:var(--fg);background:var(--soft)}
     <div class="trends" id="trendsBox"></div>
   </main>
 
+  <main id="viewGuide" hidden>
+    <input class="gsearch" id="gSearch" type="search" placeholder="Search the guide: fever, latch, jaundice…" aria-label="Search the guide" autocomplete="off">
+    <div id="guideBox"></div>
+  </main>
+
   <main id="viewHistory" hidden>
     <div class="chips" id="chips" role="group" aria-label="Filter"></div>
     <div id="historyList"></div>
@@ -257,6 +309,7 @@ nav.tabs button[aria-selected="true"]{color:var(--fg);background:var(--soft)}
   <button role="tab" id="tabToday" aria-selected="true">Today</button>
   <button role="tab" id="tabTrends" aria-selected="false">Trends</button>
   <button role="tab" id="tabHistory" aria-selected="false">History</button>
+  <button role="tab" id="tabGuide" aria-selected="false">Guide</button>
 </nav>
 <div id="sheetRoot"></div>
 
@@ -448,7 +501,7 @@ function timerLine(){
   const el=Date.now()-feedTimer.start,side=feedTimer.side==="left"?"Left":"Right";
   return el>=BREAST_GOAL?`${side} breast · 15 min reached, switch or stop`:`${side} breast since ${hhmm(feedTimer.start)} · goal 15 min`;
 }
-function render(){renderToday();if(tab==="history")renderHistory();if(tab==="trends")renderTrends();}
+function render(){if(rtOpenNow&&document.getElementById("rtFinish"))renderRoutine(false);renderToday();if(tab==="history")renderHistory();if(tab==="trends")renderTrends();if(tab==="guide")renderGuideLive();}
 
 /* ---------- data ---------- */
 let toastEl=null,toastTimer=null;
@@ -585,17 +638,22 @@ function sleepGuard(next){
       $("gKeep").onclick=()=>{closeSheet();next();};
     });
 }
+let rtReturn=false;
 function bottleSheet(){
   const lbt=entries.find(x=>x.type==="feed"&&x.method==="bottle");let milk=lbt?.milk||"breast";
   openSheet(`<h3>Bottle</h3>
     <div class="field"><label for="fMl">Amount (mL)</label><div class="stepper"><button type="button" data-a="-10" aria-label="10 mL less">−</button><input id="fMl" class="mlin num" type="number" inputmode="numeric" min="5" max="400" step="5"><button type="button" data-a="10" aria-label="10 mL more">+</button></div></div>
-    ${seg("k",[["breast","Breast milk"],["formula","Formula"]],milk)}
+    ${rtReturn?`<p class="note" id="fMlNote">Routine top-up: 15 to 60 mL (60 mL max).</p>`:""}
+    ${seg("k",[["breast","Breast milk"],["formula","Formula"]],rtReturn?"formula":milk)}
     ${timeField}${btns("var(--feed)","Save bottle")}`,root=>{
-      $("fMl").value=30;$("fTime").value=localInput(Date.now());
+      if(rtReturn)milk="formula";
+      $("fMl").value=30;
+      $("fMl").addEventListener("input",()=>{const n=$("fMlNote");if(n){const v=parseInt($("fMl").value)||0;n.className=v>60?"note warn":"note";n.textContent=v>60?"That's more than the 60 mL max for a routine top-up.":"Routine top-up: 15 to 60 mL (60 mL max).";}});$("fTime").value=localInput(Date.now());
       bindSeg(root,"k",v=>{milk=v;});
       root.addEventListener("click",e=>{const a=e.target.closest("[data-a]");if(a){const v=parseInt($("fMl").value)||0;$("fMl").value=Math.max(0,Math.min(400,v+ +a.dataset.a));}});
       $("fSave").onclick=()=>{const ml=parseInt($("fMl").value);if(!(ml>0&&ml<=400)){toast("Enter the amount in mL");return;}
-        const obj={type:"feed",method:"bottle",amount:ml,milk,at:fromInput($("fTime").value)};addEntry(obj);closeSheet();toast(`Bottle ${ml} mL logged at ${hhmm(obj.at)}`);};
+        const obj={type:"feed",method:"bottle",amount:ml,milk,at:fromInput($("fTime").value)};addEntry(obj);closeSheet();toast(`Bottle ${ml} mL logged at ${hhmm(obj.at)}`);
+        if(rtReturn){rtReturn=false;openRoutine();}};
     });
 }
 function generalNoteSheet(cur){
@@ -653,11 +711,13 @@ function tempSheet(cur){
 /* babies, families and codes live in the profiles section below */
 
 /* ---------- events ---------- */
+$("rtOpen").onclick=()=>openRoutine();
 $("actFeed").onclick=()=>feedTimer?stopFeed():feedSheet(null);
 $("feedQ").addEventListener("click",e=>{const b=e.target.closest(".q");if(!b)return;const a=b.dataset.a,v=b.dataset.v;
   if(a==="stop")stopFeed();else if(a==="switch")stopFeed(feedTimer.side==="left"?"right":"left");
   else if(v==="bottle")sleepGuard(bottleSheet);else sleepGuard(()=>startFeed(v));});
 setInterval(()=>{if(sleepStart&&!document.hidden)$("sleepSince").textContent=mmss(Date.now()-sleepStart);},1000);
+setInterval(()=>{if(rtOpenNow)rtTick();},1000);
 setInterval(()=>{if(feedTimer&&!document.hidden){$("feedSince").textContent=mmss(Date.now()-feedTimer.start);$("feedLast").textContent=timerLine();}},1000);
 $("actPoop").onclick=()=>quickLog("poop");
 $("poopQ").addEventListener("click",e=>{const b=e.target.closest(".q");if(b)quickLog("poop",{kind:b.dataset.v});});
@@ -681,9 +741,11 @@ $("actSleep").onclick=async()=>{
   sleepOp=write("nest_sleep_b",{p_baby:babyId}).catch(()=>{}).then(refresh);
 };
 function setTab(t){tab=t;
-  for(const [v,b,k] of [["viewToday","tabToday","today"],["viewTrends","tabTrends","trends"],["viewHistory","tabHistory","history"]]){$(v).hidden=t!==k;$(b).setAttribute("aria-selected",t===k);}
+  for(const [v,b,k] of [["viewToday","tabToday","today"],["viewTrends","tabTrends","trends"],["viewHistory","tabHistory","history"],["viewGuide","tabGuide","guide"]]){$(v).hidden=t!==k;$(b).setAttribute("aria-selected",t===k);}
   render();window.scrollTo(0,0);}
 $("tabTrends").onclick=()=>setTab("trends");
+$("tabGuide").onclick=()=>{if(!$("guideBox").childElementCount)buildGuide();setTab("guide");};
+$("gSearch").addEventListener("input",filterGuide);
 $("trendsBox").addEventListener("click",e=>{const h=e.target.closest("[data-chart]");if(h){trendSel[h.dataset.chart]=+h.dataset.i;renderTrends();}});
 $("tabToday").onclick=()=>setTab("today");
 $("tabHistory").onclick=()=>setTab("history");
@@ -701,6 +763,178 @@ $("historyList").addEventListener("click",e=>{
 setInterval(()=>{if(document.hidden)return;renderToday();refresh();},20000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden){render();refresh();}});
 
+/* ---------- guide (from AHS "Guide to the Early Days: Newborns birth to 2 months") ---------- */
+const HP="https://www.healthyparentshealthychildren.ca";
+const SRC={
+  cpsFever:["Canadian Paediatric Society: Fever and temperature taking","https://caringforkids.cps.ca/handouts/health-conditions-and-treatments/fever_and_temperature_taking"],
+  cpsJaun:["Canadian Paediatric Society: Jaundice in newborns","https://caringforkids.cps.ca/handouts/pregnancy-and-babies/jaundice_in_newborns"],
+  hcSleep:["Health Canada: Is your child safe? Sleep time","https://www.canada.ca/en/health-canada/services/consumer-product-safety/reports-publications/consumer-education/your-child-safe/sleep-time.html"],
+  wdg:["WDG Public Health: Breastfeeding, baby's first days","https://wdgpublichealth.ca/sites/default/files/breastfeeding_babys_first_days_final_version.pdf"],
+  bcFeed:["HealthLinkBC: Feeding your infant","https://www.healthlinkbc.ca/healthwise/feeding-your-infant"],
+  yes:["Alberta Health Services: Rear-facing car seat YES test","https://ppe.myhealth.alberta.ca/Alberta/AlbertaDocuments/rear-facing-car-seat-YES-test.pdf"],
+  cry:["Simcoe Muskoka Health: Why do babies cry?","https://www.simcoemuskokahealth.org/docs/default-source/topic-childhealth/why-do-babies-cry.pdf"],
+  pp:["Interior Health: Postpartum warning signs","https://www.interiorhealth.ca/sites/default/files/PDFS/postpartum-warning-signs.pdf"],
+  blues:["HealthLinkBC: Baby blues","https://www.healthlinkbc.ca/healthwise/baby-blues"],
+  ms:["Learn the Signs. Act Early: 2 month milestones","https://simcoe.ca/wp-content/uploads/2024/01/2-months.pdf"],
+  on811:["Ontario: Health811","https://www.ontario.ca/health"],
+  c988:["988 Suicide Crisis Helpline","https://988.ca"],
+};
+const REGIONS={
+  on:{name:"Ontario",emerg:"911",emergWho:"911",
+    lines:[["911","Emergencies"],["811","Health811: talk to a registered nurse 24/7, free (TTY 711)"],["988","Call or text in a mental health crisis, 24/7"]],
+    nurse:`call Health811 at 811 to talk to a registered nurse, 24/7`,
+    mh:`Call Health811 at 811, talk with your provider, or call or text 988 any time. Call 911 if you're in danger.`,
+    vax:`<p>In Ontario, routine vaccines start at 2 months: a combined vaccine (diphtheria, tetanus, whooping cough, polio and Hib), pneumococcal and rotavirus. Book with your family doctor, nurse practitioner or local public health unit.</p><p><a href="https://www.ontario.ca/page/vaccines-babies-and-toddlers">Ontario: Vaccines for babies and toddlers ›</a></p>`,
+    src:[["Ontario: Health811","https://www.ontario.ca/health"],["988 Suicide Crisis Helpline","https://988.ca"]]},
+  bc:{name:"British Columbia",emerg:"911",emergWho:"911",
+    lines:[["911","Emergencies"],["811","HealthLink BC: talk to a registered nurse 24/7, free (deaf or hard of hearing: 711)"],["988","Call or text in a mental health crisis, 24/7"],["310-6789","BC mental health support, 24 hours, no area code"]],
+    nurse:`call HealthLink BC at 811 to talk to a registered nurse, 24/7`,
+    mh:`Call HealthLink BC at 811 or 310-6789 (no area code), talk with your provider, or call or text 988 any time. Call 911 if you're in danger.`,
+    vax:`<p>In BC, free routine vaccines are given at 2 months, including protection against diphtheria, tetanus, whooping cough, hepatitis B, polio, Hib, meningococcal C, pneumococcal disease and rotavirus. Book with your health unit or family doctor.</p><p><a href="https://www.healthlinkbc.ca/healthlinkbc-files/immunizations-2-months-age">HealthLink BC: Immunizations at 2 months ›</a></p>`,
+    src:[["HealthLink BC 8-1-1","https://central-okanagan.pathwaysbc.ca/programs/298"],["310 Mental Health Support","https://bc.211.ca/result/310mental-health-support-9492003"],["988 Suicide Crisis Helpline","https://988.ca"]]},
+  dxb:{name:"Dubai, UAE",emerg:"998",emergWho:"998 (ambulance)",
+    lines:[["998","Ambulance"],["999","Police"],["800 342","Dubai Health Authority, 24/7. Free doctor consultations for Dubai residents"],["800 506","Itma'en mental health support, daily 9 am to midnight, free"]],
+    nurse:`call the Dubai Health Authority at 800 342 (24/7)`,
+    mh:`Call Itma'en at 800 506 (daily, 9 am to midnight, free, Arabic and English), the Dubai Health Authority at 800 342, or talk with your provider. Call 999 or 998 if you're in danger.`,
+    vax:`<p>Under the UAE national schedule, babies get BCG and hepatitis B vaccines at birth, then Hib, DTaP, polio, pneumococcal and rotavirus vaccines at 2 months. In Dubai you can book through the Dubai Health app or website, or your paediatrician.</p><p><a href="https://www.emirates247.com/uae-guide/uae-child-vaccination-schedule-what-vaccines-are-due-and-how-to-book-in-dubai/5574">UAE child vaccination schedule ›</a></p>`,
+    src:[["UAE Government: Handling emergencies","https://u.ae/en/information-and-services/justice-safety-and-the-law/handling-emergencies"],["Dubai Health Authority: Contact","https://dha.gov.ae/en/contact-dha"],["UAE Government: Doctor for Every Citizen","https://u.ae/en/information-and-services/health-and-fitness/telemedicine/doctor-for-every-citizen"],["What's On: Itma'en helpline","https://whatson.ae/?p=383375"]]},
+};
+function detectRegion(){
+  try{const r=localStorage.getItem("nasiRegion");if(r&&REGIONS[r])return r;}catch(e){}
+  let tz="";try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||"";}catch(e){}
+  if(/^Asia\/(Dubai|Muscat)$/.test(tz))return "dxb";
+  if(/^America\/(Vancouver|Dawson_Creek|Fort_Nelson|Creston)$/.test(tz))return "bc";
+  return "on";
+}
+let region=detectRegion();
+const src=(...k)=>`<p class="gsrc">Source: ${k.map(x=>`<a href="${SRC[x][1]}" target="_blank" rel="noopener">${SRC[x][0]}</a>`).join(" · ")}</p>`;
+const more=(path,label="Read more on Healthy Parents, Healthy Children")=>`<p class="gsrc"><a href="${HP}${path}" target="_blank" rel="noopener">${label} ›</a></p>`;
+const GUIDE=[
+ {sec:"Feeding",cards:[
+  {t:"Feeding your newborn",b:`<ul><li>Feed on demand, whenever your baby shows hunger, not on a strict schedule.</li><li>Breastfed newborns feed at least 8 times in 24 hours. In the first few days you may need to wake a sleepy baby to feed.</li><li>A feed, including a diaper change, often takes 45 to 60 minutes at first.</li><li>Cluster feeding (many feeds close together, often in the evening and overnight) is normal.</li><li>Breastfed babies need a vitamin D supplement of 400 IU every day.</li></ul>${src("wdg","bcFeed")}${more("/im-a-parent/newborn-birth-2-months/feeding-your-newborn")}`},
+  {t:"A typical feeding routine (early days)",b:`<ol style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:3px"><li>First breast, about 15 minutes (start on the side due next).</li><li>Burp.</li><li>Check and change the diaper if wet or dirty.</li><li>Second breast, about 15 minutes.</li><li>Burp again.</li><li>Formula top-up of 15 to 60 mL (60 mL max), only if it's part of your feeding plan.</li><li>Settle baby on their back in their own crib.</li></ol><p>Offer feeds at least 8 times in 24 hours, about every 3 hours or sooner if baby shows hunger. Follow your health care provider's advice on top-ups, since amounts depend on your baby's age, weight and feeding.</p><p>Tap <b>Feeding routine</b> on the Today screen to be walked through these steps and log them as you go.</p>${src("wdg","hcSleep")}`},
+  {t:"Is my baby getting enough? Diaper counts",live:"diapers",b:`<p>Minimum wet diapers and poops in 24 hours for a breastfed baby:</p><div class="gtw"><table><tr><th>Day of life</th><th>Wet</th><th>Poops</th><th>Poop colour</th></tr><tr><td>1 to 2</td><td>1 to 2</td><td>1 to 2</td><td>Dark green or black, sticky</td></tr><tr><td>3</td><td>3</td><td>3</td><td>Brown, green or yellow</td></tr><tr><td>4 to 5</td><td>4 heavy</td><td>3</td><td>Yellow</td></tr><tr><td>5 and up</td><td>5 to 8 heavy</td><td>3 (first month)</td><td>Yellow, seedy</td></tr></table></div><div class="gyou" id="gDiaperLive"></div><p><b>Get help if</b> there's no poop for over 12 hours in the first week, few wet diapers or pink crystals after day 3, dark green or black poop after day 5, or your baby falls asleep after only a few minutes at the breast.</p>${src("wdg")}`},
+  {t:"Breastfeeding challenges",b:`<p>Challenges are common in the first few weeks, and you're not alone.</p><ul><li>A good latch feels like a pulling sensation, not pain.</li><li>If you have pain in your breasts or nipples, bruising, blisters or cracks, get help as soon as possible.</li><li>For support, {{NURSE}} or talk with your health care provider.</li></ul><p class="gsrc">Source: Alberta Health Services, Guide to the Early Days</p>${more("/im-a-parent/feeding-your-baby/breastfeeding-challenges-and-what-to-do")}`},
+  {t:"Breastmilk supply",b:`<p>How breastmilk supply works, and what to do if you're worried about it.</p>${more("/im-a-parent/feeding-your-baby/breastfeeding-basics")}`},
+  {t:"Expressing breastmilk by hand",b:`<p>Step-by-step guide and video for hand expressing and storing breastmilk.</p>${more("/im-a-parent/feeding-your-baby/expressed-breastmilk")}`},
+  {t:"Feeding equipment: cleaning and preparing",b:`<p>Printable guides on cleaning bottles and pump parts and preparing formula safely.</p>${more("/resources/printables-healthy-eating","Open the printables")}`},
+ ]},
+ {sec:"Caring for your newborn",cards:[
+  {t:"Taking your baby's temperature and fever",b:`<p>For babies under 2 years, a rectal temperature is most accurate. Under the arm (armpit) is the alternative.</p><div class="gtw"><table><tr><th>Method</th><th>Normal range</th></tr><tr><td>Rectal</td><td>36.6 to 37.9 °C</td></tr><tr><td>Armpit</td><td>36.5 to 37.5 °C</td></tr></table></div><p><b>A reading above the normal range is a fever. A baby under 3 months with a fever needs to be seen by a doctor urgently.</b></p>${src("cpsFever")}${more("/resources/videos-injury-prevention-and-staying-healthy","Video: taking a temperature under the arm")}${more("/im-a-parent/newborn-birth-2-months/how-your-newborn-looks")}`},
+  {t:"Jaundice (yellow skin)",b:`<p>Jaundice is very common in newborns. It's usually noticed 1 to 4 days after birth, first on the face and chest, and most of the time it goes away on its own. Watch the skin and the whites of the eyes.</p><p><b>Call your doctor if your baby:</b></p><ul><li>refuses breast or bottle feeding</li><li>is very sleepy all the time</li><li>has lost more than 10% of their birth weight</li><li>has arms and legs that look yellow or orange</li><li>has jaundice that seems to be getting worse</li></ul>${src("cpsJaun")}${more("/im-a-parent/newborn-birth-2-months/how-your-newborn-looks")}`},
+  {t:"Milestones: birth to 2 months",b:`<p>By about 2 months, most babies:</p><ul><li>begin to smile at people and look at their parents</li><li>coo and turn their head toward sounds</li><li>pay attention to faces and begin to follow things with their eyes</li><li>hold their head up and begin to push up during tummy time</li></ul><p>Talk with your baby's health care provider about milestones at every visit.</p>${src("ms")}${more("/im-a-parent/newborn-birth-2-months/your-newborn-babys-development")}`},
+  {t:"Skin-to-skin and cuddling",b:`<p>Why skin-to-skin contact and cuddling matter in the early weeks, and how to do it.</p>${more("/im-a-parent/newborn-birth-2-months/growing-learning-together")}`},
+  {t:"Serve-and-return: building your baby's brain",b:`<p>When your baby coos, looks or cries and you respond with words, eye contact or a smile, you're building their brain. These back-and-forth moments matter from day one.</p>${more("/im-a-parent/newborn-birth-2-months/your-newborn-babys-development")}`},
+ ]},
+ {sec:"Keeping your baby safe",cards:[
+  {t:"Safe sleep",b:`<ul><li>Always put your baby on their back to sleep, for naps and at night, in a crib, cradle or bassinet.</li><li>Keep the crib empty except for a firm mattress and a fitted sheet. No pillows, quilts, bumper pads, toys or sleep positioners.</li><li>Share a room for the first 6 months, with the crib within arm's reach of your bed. Bed sharing is not recommended.</li><li>Never let your baby sleep on a couch, armchair, adult bed or air mattress.</li><li>Don't let your baby sleep for long in a car seat, stroller or swing. Move them to their crib.</li><li>Don't overheat the room, and keep your home smoke-free.</li></ul>${src("hcSleep")}${more("/im-a-parent/newborn-birth-2-months/safe-sleep-preventing-injuries")}${more("/resources/tools/safe-sleep-safe-crib","Interactive tool: safe sleep, safe crib")}`},
+  {t:"Car seat safety: the YES test",b:`<p>Use a rear-facing seat in the back seat, never in front of an airbag, approved for use where you live (in Canada, look for the CMVSS label). Each trip, check:</p><ul><li>Harness straps are at or just below your baby's shoulders.</li><li>The chest clip is at armpit level.</li><li>Straps lie flat with no twists.</li><li>The harness is snug: you can't pinch a fold in the strap.</li><li>The carry handle is in the travel position.</li></ul><p>Register your seat and check for recalls.</p>${src("yes")}${more("/im-a-parent/healthy-growing-families/healthy-homes-and-preventing-injuries")}`},
+  {t:"Coping with crying",b:`<p>Crying often increases at about 2 weeks and peaks at about 2 months. Some babies have fussy spells of 3 to 6 hours, often in the evening.</p><p><b>Things to try:</b> feed and burp, change the diaper, hold skin-to-skin, rock or walk, adjust clothing layers, sing or talk softly, dim the lights.</p><p><b>Make a crying plan.</b> If you feel frustrated or unable to cope, put your baby down somewhere safe like their crib, and call someone you trust for help.</p><p><b>Never shake or hit a baby.</b> Shaking can cause brain damage or death.</p><p class="gsrc">Source: Alberta Health Services, Guide to the Early Days · <a href="https://www.simcoemuskokahealth.org/docs/default-source/topic-childhealth/why-do-babies-cry.pdf">Simcoe Muskoka Health: Why do babies cry?</a></p>${more("/im-a-parent/newborn-birth-2-months/everyday-care-sleeping-crying")}`},
+ ]},
+ {sec:"Caring for yourself",cards:[
+  {t:"Warning signs after birth",b:`<p><b>Call {{EMERG}} or go to emergency for:</b></p><ul><li>chest pain, trouble breathing, a seizure or collapse</li><li>bleeding that soaks a pad every hour for 2 hours or more</li><li>feeling very weak, dizzy or faint</li><li>thoughts of harming yourself, your baby or others</li></ul><p><b>Call your health care provider right away, or {{NURSE}}, for:</b> clots bigger than a golf ball, bleeding that increases or smells bad, fever over 38 °C, a red or painful incision or stitches, headaches or vision changes, a red, swollen, painful leg, or breast pain or redness that feeding doesn't relieve.</p><p>Some warning signs can appear up to a year after birth.</p>${src("pp")}${more("/im-pregnant/postpartum/caring-for-yourself")}`},
+  {t:"Baby blues and postpartum mental health",b:`<p>Baby blues often start in the first few days, peak around day 4, and ease within about 2 weeks. Postpartum depression affects up to 15 in 100 birthing parents, and partners can be affected too.</p><p><b>Get help if</b> low mood or anxiety lasts more than 2 weeks, or you feel life isn't worth living. {{MH}}</p>${src("blues")}${more("/im-pregnant/postpartum/mental-health-2")}${more("/resources/printables-pregnancy-labour-and-postpartum","Printables: self-care, mental health sheet, family support plan")}`},
+  {t:"Birth control and sex after birth",b:`<p>You can get pregnant before your period returns. Talk with your provider about birth control options.</p>${more("/im-pregnant/postpartum/birth-control")}`},
+ ]},
+ {sec:"Checkups and vaccines",cards:[
+  {t:"Vaccines and your baby's checkups",b:`{{VAX}}<p>Your provider will also check your baby's growth and development at each visit.</p>`},
+ ]},
+];
+function buildGuide(){
+  const R=REGIONS[region];
+  let h=`<div class="gregion"><span>Your region</span><div class="chips">${Object.entries(REGIONS).map(([k,v])=>`<button class="chip" data-region="${k}" aria-pressed="${k===region}">${v.name}</button>`).join("")}</div></div>
+    <section class="ghelp"><h3>Get help right away</h3><ul>
+    <li><b>Call ${R.emergWho}</b> if your baby has trouble breathing, turns blue, has a seizure, or won't wake up.</li>
+    <li><b>Fever in a baby under 3 months</b> (armpit above 37.5 °C or rectal above 37.9 °C): your baby needs to be seen by a doctor urgently.</li></ul></section>
+    <div class="glines">${R.lines.map(([n,t])=>`<div class="gline"><b>${n}</b><span>${t}</span></div>`).join("")}</div>
+    <p class="gsrc" style="margin:-10px 0 18px">Numbers for ${R.name} from: ${R.src.map(([t,u])=>`<a href="${u}">${t}</a>`).join(" · ")}</p>`;
+  const fill=x=>x.replaceAll("{{NURSE}}",R.nurse).replaceAll("{{EMERG}}",R.emerg).replaceAll("{{MH}}",R.mh).replaceAll("{{VAX}}",R.vax);
+  GUIDE.forEach((sec,si)=>{h+=`<section class="gsec" data-sec="${si}"><h2>${sec.sec}</h2>`;
+    sec.cards.forEach((c,ci)=>{const b=fill(c.b);h+=`<details class="gcard" data-txt="${esc((c.t+" "+b.replace(/<[^>]+>/g," ")).toLowerCase())}"${c.live?` data-live="${c.live}"`:""}><summary>${c.t}</summary><div class="gb">${b}</div></details>`;});
+    h+=`</section>`;});
+  h+=`<p class="gfoot">General information only. It doesn't replace advice from your health care provider. Topics follow Alberta Health Services' <i>Guide to the Early Days: Newborns, Birth to 2 Months</i>, with details from the health sources listed on each card. Medical guidance is general; help numbers change by region, so pick yours at the top.</p>`;
+  $("guideBox").innerHTML=h;
+  $("guideBox").querySelectorAll("a").forEach(a=>{a.target="_blank";a.rel="noopener";});
+  $("guideBox").querySelectorAll("[data-region]").forEach(b=>b.onclick=()=>{region=b.dataset.region;try{localStorage.setItem("nasiRegion",region);}catch(e){}buildGuide();filterGuide();toast(`Showing help numbers for ${REGIONS[region].name}`);});
+  renderGuideLive();
+}
+function filterGuide(){
+  const q=$("gSearch").value.trim().toLowerCase();
+  $("guideBox").querySelectorAll(".gcard").forEach(c=>{const hit=!q||c.dataset.txt.includes(q);c.hidden=!hit;if(q&&hit)c.open=true;});
+  $("guideBox").querySelectorAll(".gsec").forEach(s=>{s.hidden=!s.querySelector(".gcard:not([hidden])");});
+}
+function renderGuideLive(){
+  const el=$("gDiaperLive");if(!el)return;
+  const s0=dayStart(Date.now()),dz=entries.filter(e=>e.type==="poop"&&e.at>=s0);
+  const wet=dz.filter(e=>e.kind==="wet"||e.kind==="both").length,dirty=dz.filter(e=>e.kind==="dirty"||e.kind==="both").length,plain=dz.filter(e=>!e.kind).length;
+  let target="";
+  if(baby.born){const d=Math.floor((s0-dayStart(baby.born))/DAY)+1;
+    const t=d<=2?[1,1]:d===3?[3,3]:d<=4?[4,3]:[5,3];
+    target=` ${esc(baby.name||"Your baby")} is on day ${d} of life (the birth day counts as day 1), so aim for at least ${t[0]} wet and ${t[1]} poops.`;}
+  el.innerHTML=`<b>Today in NasiLog:</b> ${wet} wet, ${dirty} dirty${plain?`, plus ${plain} without a type`:""}.${target||" Add a birthday (tap Switch, then Edit) to compare with the table."}`;
+}
+/* ---------- guided feeding routine ---------- */
+let rt=null,rtOpenNow=false;
+function rtKey(){return "nasiRoutine:"+(babyId||"x");}
+function rtLoad(){try{rt=JSON.parse(localStorage.getItem(rtKey())||"null");}catch(e){rt=null;}if(rt&&Date.now()-rt.start>4*HR)rt=null;}
+function rtSave(){try{rt?localStorage.setItem(rtKey(),JSON.stringify(rt)):localStorage.removeItem(rtKey());}catch(e){}}
+function rtSince(pred){return rt&&entries.some(e=>e.at>=rt.start-MIN&&pred(e));}
+function openRoutine(){
+  rtLoad();
+  if(!rt){const lb=entries.find(e=>e.type==="feed"&&(e.method==="left"||e.method==="right"));
+    const first=lb?(lb.method==="left"?"right":"left"):"right";
+    rt={start:Date.now(),first,second:first==="left"?"right":"left",burp1:false,burp2:false,dry:false,settle:false,skipTop:false};rtSave();}
+  rtOpenNow=true;renderRoutine(true);
+}
+function rtSide(side){return side==="left"?"Left":"Right";}
+function renderRoutine(fresh){
+  if(!rt){rtOpenNow=false;return;}
+  const fs=feedSessions(),last=fs[fs.length-1];
+  const s1=rtSince(e=>e.type==="feed"&&e.method===rt.first),s2=rtSince(e=>e.type==="feed"&&e.method===rt.second);
+  const run1=feedTimer&&feedTimer.side===rt.first,run2=feedTimer&&feedTimer.side===rt.second;
+  const dia=rtSince(e=>e.type==="poop")||rt.dry,top=rtSince(e=>e.type==="feed"&&e.method==="bottle")||rt.skipTop;
+  const steps=[
+    {done:s1&&!run1,t:`${rtSide(rt.first)} breast, about 15 min`,d:`Starts on the side due next. A good latch feels like pulling, not pain.`,
+      a:run1?`<button class="stop" data-rt="stop1">Stop · <span class="num rtTimer"></span></button><button data-rt="switch">Switch to ${rtSide(rt.second)}</button>`:(s1?"":`<button class="go" data-rt="start1">Start ${rtSide(rt.first)} timer</button>`)},
+    {done:rt.burp1,t:"Burp",d:"Hold baby upright against your shoulder or sitting on your lap, and gently pat or rub the back.",a:rt.burp1?"":`<button data-rt="burp1">Done</button>`},
+    {done:dia,t:"Check the diaper",d:"Log what you find.",
+      a:dia?"":`<button data-rt="wet">Wet</button><button data-rt="dirty">Dirty</button><button data-rt="both">Both</button><button data-rt="dry">Dry, no change</button>`},
+    {done:s2&&!run2,t:`${rtSide(rt.second)} breast, about 15 min`,d:"",
+      a:run2?`<button class="stop" data-rt="stop2">Stop · <span class="num rtTimer"></span></button>`:(s2?"":`<button class="go" data-rt="start2">Start ${rtSide(rt.second)} timer</button>`)},
+    {done:rt.burp2,t:"Burp again",d:"",a:rt.burp2?"":`<button data-rt="burp2">Done</button>`},
+    {done:top,t:"Formula top-up, 15 to 60 mL",d:"Only if part of your feeding plan. 60 mL max. Stop when baby shows they're full.",
+      a:top?"":`<button class="go" data-rt="bottle">Log top-up</button><button data-rt="skiptop">Not needed</button>`},
+    {done:rt.settle,t:"Settle baby on their back",d:"For sleep, always on their back in their own crib or bassinet, with nothing else in it.",a:rt.settle?"":`<button data-rt="settle">Done</button>`},
+  ];
+  const nowIdx=steps.findIndex(x=>!x.done);
+  const dueLine=last?`Last feed started at ${hhmm(last.at)}. Newborns feed at least 8 times in 24 hours, so offer the next feed by about <b>${hhmm(last.at+3*HR)}</b>, or sooner if baby shows hunger. Wake a sleepy baby if needed in the first days.`:`Newborns feed at least 8 times in 24 hours, about every 3 hours or sooner if baby shows hunger.`;
+  const html=`<h3>Feeding routine</h3>
+    <div class="rtdue">${dueLine}</div>
+    <div class="rtsteps">${steps.map((x,i)=>`<div class="rtstep${x.done?" done":""}${i===nowIdx?" now":""}"><span class="rtnum">${x.done?"✓":i+1}</span><div class="rtbody"><b>${x.t}</b>${x.d?`<small>${x.d}</small>`:""}${x.a&&!x.done?`<div class="rtacts">${x.a}</div>`:""}</div></div>`).join("")}</div>
+    <p class="note">Each step is logged to ${esc(baby.name||"your baby")}'s history as you go. Vitamin D: breastfed babies need 400 IU a day.</p>
+    <div class="sheetbtns"><button class="btn" id="rtClose">Close</button><button class="primary" id="rtFinish" style="background:var(--fg)">${nowIdx===-1?"Finish routine":"End routine"}</button></div>`;
+  if(fresh||!document.getElementById("rtFinish"))openSheet(html,bindRoutine);
+  else{const sh=document.querySelector(".sheet");const y=sh.scrollTop;sh.innerHTML=html;bindRoutine(sh);sh.scrollTop=y;}
+  rtTick();
+}
+function rtTick(){document.querySelectorAll(".rtTimer").forEach(el=>{if(feedTimer)el.textContent=mmss(Date.now()-feedTimer.start);});}
+function bindRoutine(root){
+  root.querySelector("#rtClose").onclick=()=>{rtOpenNow=false;closeSheet();};
+  root.querySelector("#rtFinish").onclick=()=>{if(feedTimer)stopFeed();rt=null;rtSave();rtOpenNow=false;closeSheet();toast("Routine finished");};
+  root.querySelectorAll("[data-rt]").forEach(b=>b.onclick=()=>{
+    const a=b.dataset.rt;
+    if(a==="start1"||a==="start2"){const side=a==="start1"?rt.first:rt.second;rtOpenNow=false;
+      sleepGuard(()=>{if(feedTimer&&feedTimer.side!==side)stopFeed(side);else startFeed(side);openRoutine();});return;}
+    if(a==="stop1"||a==="stop2"){stopFeed();}
+    else if(a==="switch"){stopFeed(rt.second);}
+    else if(a==="burp1"||a==="burp2"||a==="settle"){rt[a]=true;}
+    else if(a==="dry"){rt.dry=true;}
+    else if(a==="skiptop"){rt.skipTop=true;}
+    else if(a==="wet"||a==="dirty"||a==="both"){quickLog("poop",{kind:a});}
+    else if(a==="bottle"){rtReturn=true;rtOpenNow=false;bottleSheet();return;}
+    rtSave();renderRoutine(false);
+  });
+}
 /* ---------- families & babies ---------- */
 function loadLocal(){
   try{families=JSON.parse(localStorage.getItem("nasiFamilies")||"[]");}catch(e){families=[];}
@@ -710,7 +944,7 @@ function loadLocal(){
   code=cur.code&&families.some(f=>f.code===cur.code)?cur.code:(families[0]?.code||"");babyId=cur.code===code?cur.baby||null:null;
 }
 function saveLocal(){try{localStorage.setItem("nasiFamilies",JSON.stringify(families));localStorage.setItem("nasiCurrent",JSON.stringify({code,baby:babyId}));localStorage.removeItem("nestCode");}catch(e){}}
-function resetView(){entries=[];sleepStart=null;feedTimer=null;baby={};openRow=confirmRow=null;histLimit=1500;Object.keys(trendSel).forEach(k=>delete trendSel[k]);render();}
+function resetView(){rtOpenNow=false;rt=null;entries=[];sleepStart=null;feedTimer=null;baby={};openRow=confirmRow=null;histLimit=1500;Object.keys(trendSel).forEach(k=>delete trendSel[k]);render();}
 async function openFamily(c,bid){
   const prev={code,babyId};code=c;
   try{family=await rpc("nest_family_info");}
